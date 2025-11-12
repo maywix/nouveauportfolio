@@ -5,7 +5,6 @@ import { CompetencesComponent } from "./components/competences/competences.compo
 import { ContactComponent } from "./components/contact/contact.component";
 import { HeaderComponent } from "./components/header/header.component";
 import { HeroComponent } from "./components/hero/hero.component";
-import { IntroOverlayComponent } from "./components/intro-overlay/intro-overlay.component";
 import { ProjectsComponent } from "./components/projects/projects.component";
 import { SiteFooterComponent } from "./components/site-footer/site-footer.component";
 import { TimelineComponent } from "./components/timeline/timeline.component";
@@ -15,7 +14,6 @@ import { TimelineComponent } from "./components/timeline/timeline.component";
   standalone: true,
   imports: [
     CommonModule,
-    IntroOverlayComponent,
     HeaderComponent,
     HeroComponent,
     CompetencesComponent,
@@ -29,6 +27,7 @@ import { TimelineComponent } from "./components/timeline/timeline.component";
 })
 export class AppComponent implements AfterViewInit {
   introVisible = true;
+  private heroAnimationPending = false;
 
   @ViewChild(HeroComponent) private heroComponent?: HeroComponent;
 
@@ -37,11 +36,20 @@ export class AppComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     this.prepareSectionsForReveal();
     this.setupSectionObserver();
+
+    if (this.heroAnimationPending) {
+      this.heroAnimationPending = false;
+      this.heroComponent?.animateIntro();
+    }
   }
 
   handleIntroClosed(): void {
     this.introVisible = false;
-    this.heroComponent?.animateIntro();
+    if (this.heroComponent) {
+      this.heroComponent.animateIntro();
+    } else {
+      this.heroAnimationPending = true;
+    }
   }
 
   private prepareSectionsForReveal(): void {

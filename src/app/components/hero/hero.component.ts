@@ -32,9 +32,14 @@ export class HeroComponent implements AfterViewInit {
   @ViewChildren("heroLetter")
   private heroLetters!: QueryList<ElementRef<HTMLElement>>;
 
+  private viewInitialized = false;
+  private animationQueued = false;
+
   constructor(private readonly zone: NgZone) {}
 
   ngAfterViewInit(): void {
+    this.viewInitialized = true;
+
     this.zone.runOutsideAngular(() => {
       this.heroWords.forEach((word: ElementRef<HTMLElement>) => {
         word.nativeElement.style.visibility = "hidden";
@@ -44,9 +49,25 @@ export class HeroComponent implements AfterViewInit {
         gsap.set(letter.nativeElement, { opacity: 0 });
       });
     });
+
+    if (this.animationQueued) {
+      this.animationQueued = false;
+      this.playIntroAnimation();
+    }
   }
 
   animateIntro(): void {
+    this.animationQueued = true;
+
+    if (!this.viewInitialized) {
+      return;
+    }
+
+    this.animationQueued = false;
+    this.playIntroAnimation();
+  }
+
+  private playIntroAnimation(): void {
     this.zone.runOutsideAngular(() => {
       const words = this.heroWords
         .toArray()

@@ -11,16 +11,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   AppComponent: () => (/* binding */ AppComponent)
 /* harmony export */ });
-/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @angular/common */ 316);
-/* harmony import */ var gsap__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! gsap */ 9582);
-/* harmony import */ var _components_intro_overlay_intro_overlay_component__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./components/intro-overlay/intro-overlay.component */ 2433);
-/* harmony import */ var _components_header_header_component__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/header/header.component */ 385);
-/* harmony import */ var _components_hero_hero_component__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/hero/hero.component */ 9307);
-/* harmony import */ var _components_competences_competences_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/competences/competences.component */ 7725);
+/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @angular/common */ 316);
+/* harmony import */ var gsap__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! gsap */ 9582);
+/* harmony import */ var _components_competences_competences_component__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./components/competences/competences.component */ 7725);
+/* harmony import */ var _components_contact_contact_component__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/contact/contact.component */ 1777);
+/* harmony import */ var _components_header_header_component__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/header/header.component */ 385);
+/* harmony import */ var _components_hero_hero_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/hero/hero.component */ 9307);
 /* harmony import */ var _components_projects_projects_component__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/projects/projects.component */ 3607);
-/* harmony import */ var _components_timeline_timeline_component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/timeline/timeline.component */ 5041);
-/* harmony import */ var _components_contact_contact_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/contact/contact.component */ 1777);
-/* harmony import */ var _components_site_footer_site_footer_component__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./components/site-footer/site-footer.component */ 6589);
+/* harmony import */ var _components_site_footer_site_footer_component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/site-footer/site-footer.component */ 6589);
+/* harmony import */ var _components_timeline_timeline_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/timeline/timeline.component */ 5041);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @angular/core */ 7580);
 
 
@@ -32,38 +31,33 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
-
-function AppComponent_app_intro_overlay_0_Template(rf, ctx) {
-  if (rf & 1) {
-    const _r1 = _angular_core__WEBPACK_IMPORTED_MODULE_8__["ɵɵgetCurrentView"]();
-    _angular_core__WEBPACK_IMPORTED_MODULE_8__["ɵɵelementStart"](0, "app-intro-overlay", 2);
-    _angular_core__WEBPACK_IMPORTED_MODULE_8__["ɵɵlistener"]("closed", function AppComponent_app_intro_overlay_0_Template_app_intro_overlay_closed_0_listener() {
-      _angular_core__WEBPACK_IMPORTED_MODULE_8__["ɵɵrestoreView"](_r1);
-      const ctx_r1 = _angular_core__WEBPACK_IMPORTED_MODULE_8__["ɵɵnextContext"]();
-      return _angular_core__WEBPACK_IMPORTED_MODULE_8__["ɵɵresetView"](ctx_r1.handleIntroClosed());
-    });
-    _angular_core__WEBPACK_IMPORTED_MODULE_8__["ɵɵelementEnd"]();
-  }
-}
 class AppComponent {
   constructor(zone) {
     this.zone = zone;
     this.introVisible = true;
+    this.heroAnimationPending = false;
   }
   ngAfterViewInit() {
     this.prepareSectionsForReveal();
     this.setupSectionObserver();
+    if (this.heroAnimationPending) {
+      this.heroAnimationPending = false;
+      this.heroComponent?.animateIntro();
+    }
   }
   handleIntroClosed() {
     this.introVisible = false;
-    this.heroComponent?.animateIntro();
+    if (this.heroComponent) {
+      this.heroComponent.animateIntro();
+    } else {
+      this.heroAnimationPending = true;
+    }
   }
   prepareSectionsForReveal() {
     this.zone.runOutsideAngular(() => {
-      const sections = Array.from(document.querySelectorAll('main section'));
+      const sections = Array.from(document.querySelectorAll("main section"));
       sections.forEach(section => {
-        gsap__WEBPACK_IMPORTED_MODULE_9__["default"].set(section, {
+        gsap__WEBPACK_IMPORTED_MODULE_7__["default"].set(section, {
           autoAlpha: 0,
           y: 20
         });
@@ -72,15 +66,15 @@ class AppComponent {
   }
   setupSectionObserver() {
     this.zone.runOutsideAngular(() => {
-      const sections = Array.from(document.querySelectorAll('main section'));
+      const sections = Array.from(document.querySelectorAll("main section"));
       const observer = new IntersectionObserver(entries => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
-            gsap__WEBPACK_IMPORTED_MODULE_9__["default"].to(entry.target, {
+            gsap__WEBPACK_IMPORTED_MODULE_7__["default"].to(entry.target, {
               autoAlpha: 1,
               y: 0,
               duration: 0.8,
-              ease: 'power2.out'
+              ease: "power2.out"
             });
             observer.unobserve(entry.target);
           }
@@ -102,7 +96,7 @@ class AppComponent {
       selectors: [["app-root"]],
       viewQuery: function AppComponent_Query(rf, ctx) {
         if (rf & 1) {
-          _angular_core__WEBPACK_IMPORTED_MODULE_8__["ɵɵviewQuery"](_components_hero_hero_component__WEBPACK_IMPORTED_MODULE_2__.HeroComponent, 5);
+          _angular_core__WEBPACK_IMPORTED_MODULE_8__["ɵɵviewQuery"](_components_hero_hero_component__WEBPACK_IMPORTED_MODULE_3__.HeroComponent, 5);
         }
         if (rf & 2) {
           let _t;
@@ -111,23 +105,19 @@ class AppComponent {
       },
       standalone: true,
       features: [_angular_core__WEBPACK_IMPORTED_MODULE_8__["ɵɵStandaloneFeature"]],
-      decls: 9,
-      vars: 1,
-      consts: [[3, "closed", 4, "ngIf"], [1, "min-h-screen"], [3, "closed"]],
+      decls: 8,
+      vars: 0,
+      consts: [[1, "min-h-screen"]],
       template: function AppComponent_Template(rf, ctx) {
         if (rf & 1) {
-          _angular_core__WEBPACK_IMPORTED_MODULE_8__["ɵɵtemplate"](0, AppComponent_app_intro_overlay_0_Template, 1, 0, "app-intro-overlay", 0);
-          _angular_core__WEBPACK_IMPORTED_MODULE_8__["ɵɵelement"](1, "app-header");
-          _angular_core__WEBPACK_IMPORTED_MODULE_8__["ɵɵelementStart"](2, "main", 1);
-          _angular_core__WEBPACK_IMPORTED_MODULE_8__["ɵɵelement"](3, "app-hero")(4, "app-competences")(5, "app-projects")(6, "app-timeline")(7, "app-contact");
+          _angular_core__WEBPACK_IMPORTED_MODULE_8__["ɵɵelement"](0, "app-header");
+          _angular_core__WEBPACK_IMPORTED_MODULE_8__["ɵɵelementStart"](1, "main", 0);
+          _angular_core__WEBPACK_IMPORTED_MODULE_8__["ɵɵelement"](2, "app-hero")(3, "app-competences")(4, "app-projects")(5, "app-timeline")(6, "app-contact");
           _angular_core__WEBPACK_IMPORTED_MODULE_8__["ɵɵelementEnd"]();
-          _angular_core__WEBPACK_IMPORTED_MODULE_8__["ɵɵelement"](8, "app-site-footer");
-        }
-        if (rf & 2) {
-          _angular_core__WEBPACK_IMPORTED_MODULE_8__["ɵɵproperty"]("ngIf", ctx.introVisible);
+          _angular_core__WEBPACK_IMPORTED_MODULE_8__["ɵɵelement"](7, "app-site-footer");
         }
       },
-      dependencies: [_angular_common__WEBPACK_IMPORTED_MODULE_10__.CommonModule, _angular_common__WEBPACK_IMPORTED_MODULE_10__.NgIf, _components_intro_overlay_intro_overlay_component__WEBPACK_IMPORTED_MODULE_0__.IntroOverlayComponent, _components_header_header_component__WEBPACK_IMPORTED_MODULE_1__.HeaderComponent, _components_hero_hero_component__WEBPACK_IMPORTED_MODULE_2__.HeroComponent, _components_competences_competences_component__WEBPACK_IMPORTED_MODULE_3__.CompetencesComponent, _components_projects_projects_component__WEBPACK_IMPORTED_MODULE_4__.ProjectsComponent, _components_timeline_timeline_component__WEBPACK_IMPORTED_MODULE_5__.TimelineComponent, _components_contact_contact_component__WEBPACK_IMPORTED_MODULE_6__.ContactComponent, _components_site_footer_site_footer_component__WEBPACK_IMPORTED_MODULE_7__.SiteFooterComponent],
+      dependencies: [_angular_common__WEBPACK_IMPORTED_MODULE_9__.CommonModule, _components_header_header_component__WEBPACK_IMPORTED_MODULE_2__.HeaderComponent, _components_hero_hero_component__WEBPACK_IMPORTED_MODULE_3__.HeroComponent, _components_competences_competences_component__WEBPACK_IMPORTED_MODULE_0__.CompetencesComponent, _components_projects_projects_component__WEBPACK_IMPORTED_MODULE_4__.ProjectsComponent, _components_timeline_timeline_component__WEBPACK_IMPORTED_MODULE_6__.TimelineComponent, _components_contact_contact_component__WEBPACK_IMPORTED_MODULE_1__.ContactComponent, _components_site_footer_site_footer_component__WEBPACK_IMPORTED_MODULE_5__.SiteFooterComponent],
       styles: ["[_nghost-%COMP%] {\n  display: block;\n}\n\n/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8uL3NyYy9hcHAvYXBwLmNvbXBvbmVudC5jc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7RUFDRSxjQUFjO0FBQ2hCIiwic291cmNlc0NvbnRlbnQiOlsiOmhvc3Qge1xuICBkaXNwbGF5OiBibG9jaztcbn1cbiJdLCJzb3VyY2VSb290IjoiIn0= */"]
     });
   }
@@ -571,16 +561,19 @@ function HeroComponent_ng_container_6_Template(rf, ctx) {
 class HeroComponent {
   constructor(zone) {
     this.zone = zone;
-    this.firstNameLetters = 'MAXIME'.split('');
-    this.lastNameLetters = 'FARRUGGIA'.split('');
-    this.chips = ['Montage Vidéo', 'Développement Web', '3D', 'Motion/Graphic Design'];
+    this.firstNameLetters = "MAXIME".split("");
+    this.lastNameLetters = "FARRUGGIA".split("");
+    this.chips = ["Montage Vidéo", "Développement Web", "3D", "Motion/Graphic Design"];
+    this.viewInitialized = false;
+    this.animationQueued = false;
   }
   ngAfterViewInit() {
+    this.viewInitialized = true;
     this.zone.runOutsideAngular(() => {
       this.heroWords.forEach(word => {
-        word.nativeElement.style.visibility = 'hidden';
+        word.nativeElement.style.visibility = "hidden";
         gsap__WEBPACK_IMPORTED_MODULE_1__["default"].set(word.nativeElement, {
-          letterSpacing: '0rem',
+          letterSpacing: "0rem",
           opacity: 0
         });
       });
@@ -590,8 +583,20 @@ class HeroComponent {
         });
       });
     });
+    if (this.animationQueued) {
+      this.animationQueued = false;
+      this.playIntroAnimation();
+    }
   }
   animateIntro() {
+    this.animationQueued = true;
+    if (!this.viewInitialized) {
+      return;
+    }
+    this.animationQueued = false;
+    this.playIntroAnimation();
+  }
+  playIntroAnimation() {
     this.zone.runOutsideAngular(() => {
       const words = this.heroWords.toArray().map(word => word.nativeElement);
       const letters = this.heroLetters.toArray().map(letter => letter.nativeElement);
@@ -599,10 +604,10 @@ class HeroComponent {
         return;
       }
       words.forEach(word => {
-        word.style.visibility = 'visible';
+        word.style.visibility = "visible";
       });
       gsap__WEBPACK_IMPORTED_MODULE_1__["default"].set(words, {
-        letterSpacing: '0rem',
+        letterSpacing: "0rem",
         opacity: 0
       });
       gsap__WEBPACK_IMPORTED_MODULE_1__["default"].set(letters, {
@@ -614,16 +619,16 @@ class HeroComponent {
         stagger: 0.05
       });
       gsap__WEBPACK_IMPORTED_MODULE_1__["default"].to(words, {
-        letterSpacing: '1.2rem',
+        letterSpacing: "1.2rem",
         opacity: 1,
         duration: 0.8,
-        ease: 'power2.out',
+        ease: "power2.out",
         stagger: 0.1,
         onComplete: () => {
           gsap__WEBPACK_IMPORTED_MODULE_1__["default"].to(words, {
-            letterSpacing: '0.6rem',
+            letterSpacing: "0.6rem",
             duration: 0.6,
-            ease: 'elastic.out(1, 0.6)',
+            ease: "elastic.out(1, 0.6)",
             stagger: 0.1
           });
         }
@@ -690,136 +695,6 @@ class HeroComponent {
 
 /***/ }),
 
-/***/ 2433:
-/*!*********************************************************************!*\
-  !*** ./src/app/components/intro-overlay/intro-overlay.component.ts ***!
-  \*********************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   IntroOverlayComponent: () => (/* binding */ IntroOverlayComponent)
-/* harmony export */ });
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ 7580);
-/* harmony import */ var gsap__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! gsap */ 9582);
-
-
-
-const _c0 = ["overlay"];
-const _c1 = ["introVideo"];
-class IntroOverlayComponent {
-  constructor(zone) {
-    this.zone = zone;
-    this.closed = new _angular_core__WEBPACK_IMPORTED_MODULE_0__.EventEmitter();
-    this.hasClosed = false;
-  }
-  ngAfterViewInit() {
-    this.attachVideoListeners();
-    this.scheduleFallbackHide();
-  }
-  ngOnDestroy() {
-    if (this.hideTimeoutId) {
-      window.clearTimeout(this.hideTimeoutId);
-    }
-  }
-  onSkip(event) {
-    event.preventDefault();
-    this.hideOverlay();
-  }
-  attachVideoListeners() {
-    const video = this.videoRef?.nativeElement;
-    if (!video) {
-      this.hideOverlay();
-      return;
-    }
-    video.addEventListener('error', () => this.hideOverlay());
-    video.addEventListener('ended', () => this.hideOverlay());
-  }
-  scheduleFallbackHide() {
-    this.zone.runOutsideAngular(() => {
-      this.hideTimeoutId = window.setTimeout(() => {
-        const video = this.videoRef?.nativeElement;
-        if (!video || video.readyState < 2) {
-          this.hideOverlay();
-        }
-      }, 3000);
-    });
-  }
-  hideOverlay() {
-    if (this.hasClosed) {
-      return;
-    }
-    this.hasClosed = true;
-    const overlayEl = this.overlayRef.nativeElement;
-    const video = this.videoRef?.nativeElement;
-    this.zone.runOutsideAngular(() => {
-      gsap__WEBPACK_IMPORTED_MODULE_1__["default"].to(overlayEl, {
-        autoAlpha: 0,
-        duration: 0.6,
-        onComplete: () => {
-          overlayEl.classList.add('hidden');
-          this.zone.run(() => {
-            this.closed.emit();
-          });
-        }
-      });
-      try {
-        video?.pause();
-      } catch (error) {
-        console.warn('Unable to pause intro video', error);
-      }
-    });
-  }
-  static {
-    this.ɵfac = function IntroOverlayComponent_Factory(t) {
-      return new (t || IntroOverlayComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_angular_core__WEBPACK_IMPORTED_MODULE_0__.NgZone));
-    };
-  }
-  static {
-    this.ɵcmp = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineComponent"]({
-      type: IntroOverlayComponent,
-      selectors: [["app-intro-overlay"]],
-      viewQuery: function IntroOverlayComponent_Query(rf, ctx) {
-        if (rf & 1) {
-          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵviewQuery"](_c0, 7);
-          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵviewQuery"](_c1, 5);
-        }
-        if (rf & 2) {
-          let _t;
-          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵqueryRefresh"](_t = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵloadQuery"]()) && (ctx.overlayRef = _t.first);
-          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵqueryRefresh"](_t = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵloadQuery"]()) && (ctx.videoRef = _t.first);
-        }
-      },
-      outputs: {
-        closed: "closed"
-      },
-      standalone: true,
-      features: [_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵStandaloneFeature"]],
-      decls: 7,
-      vars: 0,
-      consts: [["overlay", ""], ["introVideo", ""], ["id", "introOverlay", 1, "fixed", "inset-0", "z-50", "bg-primary", "flex", "items-center", "justify-center"], ["id", "introVideo", "playsinline", "", "muted", "", "preload", "auto", "autoplay", "", 1, "w-full", "h-full", "object-cover"], ["src", "assets/intro.mp4", "type", "video/mp4"], ["id", "skipBtn", 1, "absolute", "top-6", "right-6", "bg-accent", "text-primary", "px-4", "py-2", "rounded-full", "shadow-lg", 3, "click"]],
-      template: function IntroOverlayComponent_Template(rf, ctx) {
-        if (rf & 1) {
-          const _r1 = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵgetCurrentView"]();
-          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](0, "div", 2, 0)(2, "video", 3, 1);
-          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelement"](4, "source", 4);
-          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
-          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](5, "button", 5);
-          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵlistener"]("click", function IntroOverlayComponent_Template_button_click_5_listener($event) {
-            _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵrestoreView"](_r1);
-            return _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵresetView"](ctx.onSkip($event));
-          });
-          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](6, " Skip ");
-          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]()();
-        }
-      },
-      styles: ["[_nghost-%COMP%] {\n  display: block;\n}\n\n/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8uL3NyYy9hcHAvY29tcG9uZW50cy9pbnRyby1vdmVybGF5L2ludHJvLW92ZXJsYXkuY29tcG9uZW50LmNzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtFQUNFLGNBQWM7QUFDaEIiLCJzb3VyY2VzQ29udGVudCI6WyI6aG9zdCB7XG4gIGRpc3BsYXk6IGJsb2NrO1xufVxuIl0sInNvdXJjZVJvb3QiOiIifQ== */"]
-    });
-  }
-}
-
-/***/ }),
-
 /***/ 3607:
 /*!***********************************************************!*\
   !*** ./src/app/components/projects/projects.component.ts ***!
@@ -858,19 +733,19 @@ class ProjectsComponent {
           _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](6, "Projet 1");
           _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
           _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](7, "p", 5);
-          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](8, " Description courte du projet, technologies et r\u00F4le. ");
+          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](8, "Description courte du projet, technologies et r\u00F4le.");
           _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]()();
           _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](9, "article", 3)(10, "h3", 4);
           _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](11, "Projet 2");
           _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
           _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](12, "p", 5);
-          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](13, " Description courte du projet, technologies et r\u00F4le. ");
+          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](13, "Description courte du projet, technologies et r\u00F4le.");
           _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]()();
           _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](14, "article", 3)(15, "h3", 4);
           _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](16, "Projet 3");
           _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
           _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](17, "p", 5);
-          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](18, " Description courte du projet, technologies et r\u00F4le. ");
+          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](18, "Description courte du projet, technologies et r\u00F4le.");
           _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]()()()();
         }
       },
