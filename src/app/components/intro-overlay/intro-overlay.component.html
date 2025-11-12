@@ -1,0 +1,24 @@
+<div
+  #overlay
+  id="introOverlay"
+  class="fixed inset-0 z-50 bg-primary flex items-center justify-center"
+>
+  <video
+    #introVideo
+    id="introVideo"
+    class="w-full h-full object-cover"
+    playsinline
+    muted
+    preload="auto"
+    autoplay
+  >
+    <source src="assets/intro.mp4" type="video/mp4" />
+  </video>
+  <button
+    id="skipBtn"
+    (click)="onSkip($event)"
+    class="absolute top-6 right-6 bg-accent text-primary px-4 py-2 rounded-full shadow-lg"
+  >
+    Skip
+  </button>
+</div>

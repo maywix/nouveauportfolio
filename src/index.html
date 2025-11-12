@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="fr" scroll-behavior="smooth">
+  <head>
+    <meta charset="utf-8" />
+    <title>Maxime Farruggia — Portfolio</title>
+    <base href="/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Tailwind CDN (play) - kept to preserve the exact styling configuration -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: "#074c4c",
+              accent: "#f7f7a8",
+              soft: "#0f6b66",
+            },
+          },
+        },
+      };
+    </script>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="bg-primary text-accent font-sans antialiased">
+    <app-root></app-root>
+  </body>
+</html>

@@ -1,0 +1,63 @@
+<section
+  id="presentation"
+  class="container mx-auto px-6 py-16 flex flex-col md:flex-row items-start gap-8"
+>
+  <div class="w-full md:w-2/3 relative">
+    <img
+      src="svg/fondpres.svg"
+      alt="fond"
+      class="hidden md:block absolute left-0 top-0 opacity-10 pointer-events-none"
+    />
+
+    <h1
+      id="heroName"
+      class="text-6xl md:text-8xl font-extralight leading-tight tracking-wide uppercase"
+    >
+      <ng-container
+        *ngFor="
+          let letters of [firstNameLetters, lastNameLetters];
+          let i = index
+        "
+      >
+        <span class="hero-word block" [class.mt-8]="i === 1" #heroWord>
+          <span
+            *ngFor="let letter of letters"
+            class="hero-letter inline-block"
+            #heroLetter
+          >
+            {{ letter }}
+          </span>
+        </span>
+      </ng-container>
+    </h1>
+
+    <div class="mt-12 grid grid-cols-2 gap-6 max-w-2xl">
+      <ng-container *ngFor="let chip of chips">
+        <div
+          class="px-6 py-3 bg-accent/10 rounded-full shadow-inner text-accent/95 tracking-widest"
+          [class.w-24]="chip === '3D'"
+        >
+          {{ chip }}
+        </div>
+      </ng-container>
+    </div>
+  </div>
+
+  <aside class="w-full md:w-1/3">
+    <div class="bg-accent/6 p-6 rounded-2xl backdrop-blur-sm">
+      <h3 class="text-lg text-accent mb-3">À propos</h3>
+      <p class="text-sm text-accent/90">
+        Je suis Maxime, motion designer &amp; développeur web. J'explore le
+        design d'interfaces, la vidéo et l'expérience utilisateur.
+      </p>
+      <div class="mt-4 flex gap-3">
+        <a
+          href="#contact"
+          class="text-sm bg-accent text-primary px-3 py-2 rounded-full"
+        >
+          Contactez-moi
+        </a>
+      </div>
+    </div>
+  </aside>
+</section>

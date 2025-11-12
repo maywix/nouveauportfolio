@@ -1,0 +1,13 @@
+<app-intro-overlay
+  *ngIf="introVisible"
+  (closed)="handleIntroClosed()"
+></app-intro-overlay>
+<app-header></app-header>
+<main class="min-h-screen">
+  <app-hero></app-hero>
+  <app-competences></app-competences>
+  <app-projects></app-projects>
+  <app-timeline></app-timeline>
+  <app-contact></app-contact>
+</main>
+<app-site-footer></app-site-footer>
