@@ -1,5 +1,5 @@
 <section id="projets" class="container mx-auto px-6 py-20">
-  <div class="max-w-6xl mx-auto">
+  <div class="max-w-7xl mx-auto">
     <div class="mb-12">
       <h2 class="text-3xl mb-4">Projets</h2>
       <p class="text-white/60 text-base">
@@ -12,11 +12,11 @@
       <button
         *ngFor="let option of categoryOptions"
         type="button"
-        class="px-6 py-2 rounded-full text-sm tracking-wide transition-all duration-200 border border-white/10"
+        class="projects-filter"
         [ngClass]="
           activeCategory === option.value
-            ? 'bg-accent text-primary shadow-lg shadow-accent/20'
-            : 'bg-white/5 text-white/70 hover:bg-white/10'
+            ? 'projects-filter--active'
+            : 'projects-filter--idle'
         "
         (click)="selectCategory(option.value)"
       >
@@ -56,46 +56,51 @@
     <div *ngIf="activeCategory === 'graphic'" class="space-y-10">
       <div
         *ngFor="let carousel of graphicCarousels; let idx = index"
-        class="p-6 bg-white/5 border border-white/10 rounded-2xl backdrop-blur-sm"
+        class="projects-panel"
       >
-        <div
-          class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6"
-        >
-          <h3 class="text-2xl">{{ carousel.title }}</h3>
-          <div class="flex gap-3">
+        <div class="projects-panel__header">
+          <h3 class="projects-panel__title">{{ carousel.title }}</h3>
+          <div class="projects-panel__controls">
             <button
               type="button"
-              class="carousel-nav"
+              class="projects-nav"
+              [class.projects-nav--disabled]="!canGoPrev('graphic', idx)"
+              [disabled]="!canGoPrev('graphic', idx)"
+              aria-label="Voir le projet précédent"
               (click)="previousSlide('graphic', idx)"
             >
               ‹
             </button>
             <button
               type="button"
-              class="carousel-nav"
+              class="projects-nav"
+              [class.projects-nav--disabled]="!canGoNext('graphic', idx)"
+              [disabled]="!canGoNext('graphic', idx)"
+              aria-label="Voir le projet suivant"
               (click)="nextSlide('graphic', idx)"
             >
               ›
             </button>
           </div>
         </div>
-        <div
-          class="relative overflow-hidden rounded-xl bg-accent/5 p-6 min-h-[220px] flex flex-col justify-between"
-        >
-          <div>
-            <p class="text-sm text-accent/70 uppercase tracking-[0.4em] mb-3">
-              Slide {{ graphicIndices[idx] + 1 }} / {{ carousel.slides.length }}
-            </p>
-            <h4 class="text-xl mb-2">
-              {{ getSlide("graphic", idx).title }}
-            </h4>
-            <p class="text-white/70 text-sm leading-relaxed">
-              {{ getSlide("graphic", idx).description }}
-            </p>
-          </div>
-          <span class="self-end text-xs text-white/40"
-            >Moodboard &amp; maquettes</span
+
+        <div class="projects-carousel">
+          <div
+            *ngFor="let slide of carousel.slides; let slideIndex = index"
+            class="project-card-container"
+            [ngStyle]="getCarouselStyles('graphic', idx, slideIndex)"
           >
+            <article class="project-card">
+              <p class="project-card__index">
+                {{ slideIndex + 1 }} / {{ carousel.slides.length }}
+              </p>
+              <h4 class="project-card__title">{{ slide.title }}</h4>
+              <p class="project-card__description">
+                {{ slide.description }}
+              </p>
+              <span class="project-card__tag">Moodboard &amp; maquettes</span>
+            </article>
+          </div>
         </div>
       </div>
     </div>
@@ -103,46 +108,51 @@
     <div *ngIf="activeCategory === 'threeD'" class="space-y-10">
       <div
         *ngFor="let carousel of threeDCarousels; let idx = index"
-        class="p-6 bg-white/5 border border-white/10 rounded-2xl backdrop-blur-sm"
+        class="projects-panel"
       >
-        <div
-          class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6"
-        >
-          <h3 class="text-2xl">{{ carousel.title }}</h3>
-          <div class="flex gap-3">
+        <div class="projects-panel__header">
+          <h3 class="projects-panel__title">{{ carousel.title }}</h3>
+          <div class="projects-panel__controls">
             <button
               type="button"
-              class="carousel-nav"
+              class="projects-nav"
+              [class.projects-nav--disabled]="!canGoPrev('threeD', idx)"
+              [disabled]="!canGoPrev('threeD', idx)"
+              aria-label="Voir le projet précédent"
               (click)="previousSlide('threeD', idx)"
             >
               ‹
             </button>
             <button
               type="button"
-              class="carousel-nav"
+              class="projects-nav"
+              [class.projects-nav--disabled]="!canGoNext('threeD', idx)"
+              [disabled]="!canGoNext('threeD', idx)"
+              aria-label="Voir le projet suivant"
               (click)="nextSlide('threeD', idx)"
             >
               ›
             </button>
           </div>
         </div>
-        <div
-          class="relative overflow-hidden rounded-xl bg-gradient-to-br from-white/10 via-white/5 to-white/0 p-6 min-h-[220px] flex flex-col justify-between"
-        >
-          <div>
-            <p class="text-sm text-accent/70 uppercase tracking-[0.4em] mb-3">
-              Slide {{ threeDIndices[idx] + 1 }} / {{ carousel.slides.length }}
-            </p>
-            <h4 class="text-xl mb-2">
-              {{ getSlide("threeD", idx).title }}
-            </h4>
-            <p class="text-white/70 text-sm leading-relaxed">
-              {{ getSlide("threeD", idx).description }}
-            </p>
-          </div>
-          <span class="self-end text-xs text-white/40"
-            >Rendus &amp; lighting</span
+
+        <div class="projects-carousel">
+          <div
+            *ngFor="let slide of carousel.slides; let slideIndex = index"
+            class="project-card-container"
+            [ngStyle]="getCarouselStyles('threeD', idx, slideIndex)"
           >
+            <article class="project-card project-card--gradient">
+              <p class="project-card__index">
+                {{ slideIndex + 1 }} / {{ carousel.slides.length }}
+              </p>
+              <h4 class="project-card__title">{{ slide.title }}</h4>
+              <p class="project-card__description">
+                {{ slide.description }}
+              </p>
+              <span class="project-card__tag">Rendus &amp; lighting</span>
+            </article>
+          </div>
         </div>
       </div>
     </div>
@@ -150,54 +160,58 @@
     <div *ngIf="activeCategory === 'web'" class="space-y-10">
       <div
         *ngFor="let carousel of webCarousels; let idx = index"
-        class="p-6 bg-white/5 border border-white/10 rounded-2xl backdrop-blur-sm"
+        class="projects-panel"
       >
-        <div
-          class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6"
-        >
-          <h3 class="text-2xl">{{ carousel.title }}</h3>
-          <div class="flex gap-3">
+        <div class="projects-panel__header">
+          <h3 class="projects-panel__title">{{ carousel.title }}</h3>
+          <div class="projects-panel__controls">
             <button
               type="button"
-              class="carousel-nav"
+              class="projects-nav"
+              [class.projects-nav--disabled]="!canGoPrev('web', idx)"
+              [disabled]="!canGoPrev('web', idx)"
+              aria-label="Voir le projet précédent"
               (click)="previousSlide('web', idx)"
             >
               ‹
             </button>
             <button
               type="button"
-              class="carousel-nav"
+              class="projects-nav"
+              [class.projects-nav--disabled]="!canGoNext('web', idx)"
+              [disabled]="!canGoNext('web', idx)"
+              aria-label="Voir le projet suivant"
               (click)="nextSlide('web', idx)"
             >
               ›
             </button>
           </div>
         </div>
-        <div
-          class="relative overflow-hidden rounded-xl bg-white/5 p-6 min-h-[220px] flex flex-col justify-between"
-        >
-          <div>
-            <p class="text-sm text-accent/70 uppercase tracking-[0.4em] mb-3">
-              Slide {{ webIndices[idx] + 1 }} / {{ carousel.slides.length }}
-            </p>
-            <h4 class="text-xl mb-2">
-              {{ getSlide("web", idx).title }}
-            </h4>
-            <p class="text-white/70 text-sm leading-relaxed mb-4">
-              {{ getSlide("web", idx).description }}
-            </p>
-          </div>
-          <div class="flex justify-end">
-            <a
-              *ngIf="getSlide('web', idx).link as url"
-              class="inline-flex items-center gap-2 bg-accent text-primary text-sm font-semibold px-4 py-2 rounded-full shadow-lg shadow-accent/20 transition-transform duration-200 hover:scale-105"
-              [href]="url"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Voir le site
-              <span aria-hidden="true">↗</span>
-            </a>
+
+        <div class="projects-carousel">
+          <div
+            *ngFor="let slide of carousel.slides; let slideIndex = index"
+            class="project-card-container"
+            [ngStyle]="getCarouselStyles('web', idx, slideIndex)"
+          >
+            <article class="project-card">
+              <p class="project-card__index">
+                {{ slideIndex + 1 }} / {{ carousel.slides.length }}
+              </p>
+              <h4 class="project-card__title">{{ slide.title }}</h4>
+              <p class="project-card__description">
+                {{ slide.description }}
+              </p>
+              <a
+                *ngIf="slide.link && webIndices[idx] === slideIndex"
+                class="project-card__link"
+                [href]="slide.link"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Voir le site ↗
+              </a>
+            </article>
           </div>
         </div>
       </div>

@@ -228,6 +228,7 @@ export class ProjectsComponent {
   readonly webIndices = this.webCarousels.map(() => 0);
 
   activeCategory: ProjectCategory = "video";
+  readonly maxVisibility = 3;
 
   constructor(private readonly sanitizer: DomSanitizer) {}
 
@@ -236,15 +237,14 @@ export class ProjectsComponent {
   }
 
   previousSlide(group: "graphic" | "threeD" | "web", index: number): void {
-    const { carousels, indices } = this.resolveGroup(group);
-    const total = carousels[index].slides.length;
-    indices[index] = (indices[index] - 1 + total) % total;
+    const { indices } = this.resolveGroup(group);
+    indices[index] = Math.max(0, indices[index] - 1);
   }
 
   nextSlide(group: "graphic" | "threeD" | "web", index: number): void {
     const { carousels, indices } = this.resolveGroup(group);
     const total = carousels[index].slides.length;
-    indices[index] = (indices[index] + 1) % total;
+    indices[index] = Math.min(total - 1, indices[index] + 1);
   }
 
   getSlide(group: "graphic" | "threeD" | "web", index: number): CarouselSlide {
@@ -252,11 +252,50 @@ export class ProjectsComponent {
     return carousels[index].slides[indices[index]];
   }
 
+  getCarouselStyles(
+    group: "graphic" | "threeD" | "web",
+    carouselIndex: number,
+    slideIndex: number
+  ): Record<string, string> {
+    const { indices } = this.resolveGroup(group);
+    const active = indices[carouselIndex];
+    const offset = (active - slideIndex) / this.maxVisibility;
+    const absOffset = Math.abs(active - slideIndex) / this.maxVisibility;
+    const direction = Math.sign(active - slideIndex);
+    const hidden = Math.abs(active - slideIndex) > this.maxVisibility;
+    const faded = Math.abs(active - slideIndex) >= this.maxVisibility;
+    const zIndex = (100 - Math.abs(active - slideIndex)).toString();
+
+    return {
+      "--active": active === slideIndex ? "1" : "0",
+      "--offset": offset.toString(),
+      "--direction": direction.toString(),
+      "--abs-offset": absOffset.toString(),
+      "pointer-events": active === slideIndex ? "auto" : "none",
+      opacity: faded ? "0" : "1",
+      display: hidden ? "none" : "block",
+      "z-index": zIndex,
+    };
+  }
+
+  canGoPrev(group: "graphic" | "threeD" | "web", index: number): boolean {
+    const { indices } = this.resolveGroup(group);
+    return indices[index] > 0;
+  }
+
+  canGoNext(group: "graphic" | "threeD" | "web", index: number): boolean {
+    const { carousels, indices } = this.resolveGroup(group);
+    return indices[index] < carousels[index].slides.length - 1;
+  }
+
   toSafeUrl(url: string): SafeResourceUrl {
     return this.sanitizer.bypassSecurityTrustResourceUrl(url);
   }
 
-  private resolveGroup(group: "graphic" | "threeD" | "web") {
+  private resolveGroup(group: "graphic" | "threeD" | "web"): {
+    carousels: Carousel[];
+    indices: number[];
+  } {
     switch (group) {
       case "graphic":
         return {
