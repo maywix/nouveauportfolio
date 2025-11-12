@@ -1,8 +1,60 @@
 <section id="parcours" class="container mx-auto px-6 py-20">
-  <h2 class="text-3xl mb-8">Parcours</h2>
-  <ol class="space-y-6">
-    <li><strong>2024 —</strong> Freelance Motion &amp; Web</li>
-    <li><strong>2021 — 2023</strong> Formation / expériences</li>
-    <li><strong>2018 — 2020</strong> Études &amp; stages</li>
-  </ol>
+  <div class="max-w-6xl mx-auto">
+    <div class="mb-12">
+      <h2 class="text-3xl mb-4">Parcours</h2>
+      <p class="text-base text-white/60 max-w-3xl">
+        Un aperçu de mon expérience professionnelle et de mon parcours scolaire,
+        toujours guidé par la volonté de relier création visuelle et
+        développement web.
+      </p>
+    </div>
+
+    <div class="grid gap-10 md:grid-cols-[1fr_auto_1fr] items-start">
+      <div
+        class="p-8 bg-accent/5 rounded-2xl backdrop-blur-sm border border-accent/10"
+      >
+        <h3 class="text-2xl mb-6">Expériences professionnelles</h3>
+        <div
+          *ngFor="let experience of experiences; let last = last"
+          class="pb-6 mb-6 border-b border-white/5 last:mb-0 last:pb-0 last:border-none"
+        >
+          <h4 class="text-lg font-semibold mb-1">{{ experience.title }}</h4>
+          <p class="text-white/70 italic mb-2">
+            {{ experience.organisation }}
+          </p>
+          <p class="text-sm text-accent/80 mb-3">
+            {{ experience.period }}
+          </p>
+          <p class="text-white/70 leading-relaxed">
+            {{ experience.details }}
+          </p>
+        </div>
+      </div>
+
+      <div class="hidden md:flex justify-center">
+        <span class="w-px bg-accent/20 rounded-full h-full"></span>
+      </div>
+
+      <div
+        class="p-8 bg-accent/5 rounded-2xl backdrop-blur-sm border border-accent/10"
+      >
+        <h3 class="text-2xl mb-6">Formation &amp; Diplômes</h3>
+        <div
+          *ngFor="let diploma of education; let last = last"
+          class="pb-6 mb-6 border-b border-white/5 last:mb-0 last:pb-0 last:border-none"
+        >
+          <h4 class="text-lg font-semibold mb-1">{{ diploma.title }}</h4>
+          <p class="text-white/70 italic mb-2">
+            {{ diploma.organisation }}
+          </p>
+          <p class="text-sm text-accent/80 mb-3">
+            {{ diploma.period }}
+          </p>
+          <p class="text-white/70 leading-relaxed">
+            {{ diploma.details }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
