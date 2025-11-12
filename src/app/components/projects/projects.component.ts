@@ -21,6 +21,7 @@ type CarouselSlide = {
 
 type Carousel = {
   title: string;
+  description?: string;
   slides: CarouselSlide[];
 };
 
@@ -79,6 +80,8 @@ export class ProjectsComponent {
   readonly graphicCarousels: Carousel[] = [
     {
       title: "Identités visuelles",
+      description:
+        "Brand books, déclinaisons print et cohérence multi-supports pour des marques en lancement.",
       slides: [
         {
           title: "Branding café",
@@ -99,6 +102,8 @@ export class ProjectsComponent {
     },
     {
       title: "Affiches & print",
+      description:
+        "Campagnes grand format et séries limitées avec un soin porté aux textures et finitions.",
       slides: [
         {
           title: "Festival musique",
@@ -119,6 +124,8 @@ export class ProjectsComponent {
     },
     {
       title: "Social media",
+      description:
+        "Templates dynamiques pensés pour engager les communautés sur tous les formats clés.",
       slides: [
         {
           title: "Stories mode",
@@ -141,6 +148,8 @@ export class ProjectsComponent {
   readonly threeDCarousels: Carousel[] = [
     {
       title: "Modélisation",
+      description:
+        "Pièces détaillées ou low-poly, optimisées pour l'animation comme pour le temps réel.",
       slides: [
         {
           title: "Mobilier futuriste",
@@ -159,6 +168,8 @@ export class ProjectsComponent {
     },
     {
       title: "Rendu & lighting",
+      description:
+        "Expérimentations autour des lumières, textures réalistes et ambiances narratives.",
       slides: [
         {
           title: "Still life produits",
@@ -181,6 +192,8 @@ export class ProjectsComponent {
   readonly webCarousels: Carousel[] = [
     {
       title: "Applications web",
+      description:
+        "Interfaces orientées produit avec design systems maintenables et workflows fluides.",
       slides: [
         {
           title: "Dashboard analytics",
@@ -201,6 +214,8 @@ export class ProjectsComponent {
     },
     {
       title: "Sites vitrines",
+      description:
+        "Expériences immersives qui valorisent la marque tout en restant performantes.",
       slides: [
         {
           title: "Studio créatif",

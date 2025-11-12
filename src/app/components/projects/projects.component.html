@@ -1,5 +1,5 @@
 <section id="projets" class="container mx-auto px-6 py-20">
-  <div class="max-w-7xl mx-auto">
+  <div class="max-w-10xl mx-auto">
     <div class="mb-12">
       <h2 class="text-3xl mb-4">Projets</h2>
       <p class="text-white/60 text-base">
@@ -60,31 +60,22 @@
       >
         <div class="projects-panel__header">
           <h3 class="projects-panel__title">{{ carousel.title }}</h3>
-          <div class="projects-panel__controls">
-            <button
-              type="button"
-              class="projects-nav"
-              [class.projects-nav--disabled]="!canGoPrev('graphic', idx)"
-              [disabled]="!canGoPrev('graphic', idx)"
-              aria-label="Voir le projet précédent"
-              (click)="previousSlide('graphic', idx)"
-            >
-              ‹
-            </button>
-            <button
-              type="button"
-              class="projects-nav"
-              [class.projects-nav--disabled]="!canGoNext('graphic', idx)"
-              [disabled]="!canGoNext('graphic', idx)"
-              aria-label="Voir le projet suivant"
-              (click)="nextSlide('graphic', idx)"
-            >
-              ›
-            </button>
-          </div>
+          <p *ngIf="carousel.description" class="projects-panel__description">
+            {{ carousel.description }}
+          </p>
         </div>
 
         <div class="projects-carousel">
+          <button
+            type="button"
+            class="projects-nav projects-nav--prev"
+            [class.projects-nav--disabled]="!canGoPrev('graphic', idx)"
+            [disabled]="!canGoPrev('graphic', idx)"
+            aria-label="Voir le projet précédent"
+            (click)="previousSlide('graphic', idx)"
+          >
+            ‹
+          </button>
           <div
             *ngFor="let slide of carousel.slides; let slideIndex = index"
             class="project-card-container"
@@ -101,6 +92,16 @@
               <span class="project-card__tag">Moodboard &amp; maquettes</span>
             </article>
           </div>
+          <button
+            type="button"
+            class="projects-nav projects-nav--next"
+            [class.projects-nav--disabled]="!canGoNext('graphic', idx)"
+            [disabled]="!canGoNext('graphic', idx)"
+            aria-label="Voir le projet suivant"
+            (click)="nextSlide('graphic', idx)"
+          >
+            ›
+          </button>
         </div>
       </div>
     </div>
@@ -112,31 +113,22 @@
       >
         <div class="projects-panel__header">
           <h3 class="projects-panel__title">{{ carousel.title }}</h3>
-          <div class="projects-panel__controls">
-            <button
-              type="button"
-              class="projects-nav"
-              [class.projects-nav--disabled]="!canGoPrev('threeD', idx)"
-              [disabled]="!canGoPrev('threeD', idx)"
-              aria-label="Voir le projet précédent"
-              (click)="previousSlide('threeD', idx)"
-            >
-              ‹
-            </button>
-            <button
-              type="button"
-              class="projects-nav"
-              [class.projects-nav--disabled]="!canGoNext('threeD', idx)"
-              [disabled]="!canGoNext('threeD', idx)"
-              aria-label="Voir le projet suivant"
-              (click)="nextSlide('threeD', idx)"
-            >
-              ›
-            </button>
-          </div>
+          <p *ngIf="carousel.description" class="projects-panel__description">
+            {{ carousel.description }}
+          </p>
         </div>
 
         <div class="projects-carousel">
+          <button
+            type="button"
+            class="projects-nav projects-nav--prev"
+            [class.projects-nav--disabled]="!canGoPrev('threeD', idx)"
+            [disabled]="!canGoPrev('threeD', idx)"
+            aria-label="Voir le projet précédent"
+            (click)="previousSlide('threeD', idx)"
+          >
+            ‹
+          </button>
           <div
             *ngFor="let slide of carousel.slides; let slideIndex = index"
             class="project-card-container"
@@ -153,6 +145,16 @@
               <span class="project-card__tag">Rendus &amp; lighting</span>
             </article>
           </div>
+          <button
+            type="button"
+            class="projects-nav projects-nav--next"
+            [class.projects-nav--disabled]="!canGoNext('threeD', idx)"
+            [disabled]="!canGoNext('threeD', idx)"
+            aria-label="Voir le projet suivant"
+            (click)="nextSlide('threeD', idx)"
+          >
+            ›
+          </button>
         </div>
       </div>
     </div>
@@ -164,31 +166,22 @@
       >
         <div class="projects-panel__header">
           <h3 class="projects-panel__title">{{ carousel.title }}</h3>
-          <div class="projects-panel__controls">
-            <button
-              type="button"
-              class="projects-nav"
-              [class.projects-nav--disabled]="!canGoPrev('web', idx)"
-              [disabled]="!canGoPrev('web', idx)"
-              aria-label="Voir le projet précédent"
-              (click)="previousSlide('web', idx)"
-            >
-              ‹
-            </button>
-            <button
-              type="button"
-              class="projects-nav"
-              [class.projects-nav--disabled]="!canGoNext('web', idx)"
-              [disabled]="!canGoNext('web', idx)"
-              aria-label="Voir le projet suivant"
-              (click)="nextSlide('web', idx)"
-            >
-              ›
-            </button>
-          </div>
+          <p *ngIf="carousel.description" class="projects-panel__description">
+            {{ carousel.description }}
+          </p>
         </div>
 
         <div class="projects-carousel">
+          <button
+            type="button"
+            class="projects-nav projects-nav--prev"
+            [class.projects-nav--disabled]="!canGoPrev('web', idx)"
+            [disabled]="!canGoPrev('web', idx)"
+            aria-label="Voir le projet précédent"
+            (click)="previousSlide('web', idx)"
+          >
+            ‹
+          </button>
           <div
             *ngFor="let slide of carousel.slides; let slideIndex = index"
             class="project-card-container"
@@ -213,6 +206,16 @@
               </a>
             </article>
           </div>
+          <button
+            type="button"
+            class="projects-nav projects-nav--next"
+            [class.projects-nav--disabled]="!canGoNext('web', idx)"
+            [disabled]="!canGoNext('web', idx)"
+            aria-label="Voir le projet suivant"
+            (click)="nextSlide('web', idx)"
+          >
+            ›
+          </button>
         </div>
       </div>
     </div>
