@@ -26,9 +26,6 @@ import { TimelineComponent } from "./components/timeline/timeline.component";
   styleUrl: "./app.component.css",
 })
 export class AppComponent implements AfterViewInit {
-  introVisible = true;
-  private heroAnimationPending = false;
-
   @ViewChild(HeroComponent) private heroComponent?: HeroComponent;
 
   constructor(private readonly zone: NgZone) {}
@@ -36,20 +33,7 @@ export class AppComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     this.prepareSectionsForReveal();
     this.setupSectionObserver();
-
-    if (this.heroAnimationPending) {
-      this.heroAnimationPending = false;
-      this.heroComponent?.animateIntro();
-    }
-  }
-
-  handleIntroClosed(): void {
-    this.introVisible = false;
-    if (this.heroComponent) {
-      this.heroComponent.animateIntro();
-    } else {
-      this.heroAnimationPending = true;
-    }
+    this.heroComponent?.animateIntro();
   }
 
   private prepareSectionsForReveal(): void {
