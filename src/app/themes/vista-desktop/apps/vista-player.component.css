@@ -1,0 +1,268 @@
+.vd-wmp {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  color: #dff2ff;
+  font-size: 12.5px;
+  background: radial-gradient(ellipse at 50% 120%, #0e5f78 0%, #05202f 55%, #02080e 100%);
+}
+
+.vd-wmp__tabs {
+  flex: none;
+  display: flex;
+  gap: 4px;
+  padding: 6px 10px 0;
+  background: linear-gradient(#27495c, #0b1f2b);
+  border-bottom: 1px solid #3c7690;
+}
+
+.vd-wmp__tab {
+  padding: 5px 14px 6px;
+  border-radius: 6px 6px 0 0;
+  color: #9fc4d8;
+  font-size: 12px;
+}
+
+.vd-wmp__tab--on {
+  color: #fff;
+  background: linear-gradient(#58c4ea, #1f86b8 55%, #18739f);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6), 0 0 12px rgba(80, 200, 255, 0.55);
+}
+
+.vd-wmp__stage {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+}
+
+.vd-wmp__video {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  border-radius: 4px;
+  background: #000;
+  box-shadow: 0 0 0 1px #3a7e98, 0 0 22px rgba(60, 190, 255, 0.35);
+  overflow: hidden;
+}
+
+.vd-wmp__video iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: transparent;
+}
+
+.vd-wmp__loading {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  margin: 0;
+  color: #6fa7c2;
+}
+
+.vd-wmp__list {
+  flex: none;
+  width: 190px;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  border-radius: 4px;
+  background: rgba(8, 40, 56, 0.75);
+  border: 1px solid #2f6b85;
+  overflow: hidden;
+}
+
+.vd-wmp__list h3 {
+  margin: 0;
+  padding: 6px 10px;
+  font: 600 12px "Segoe UI", "Open Sans", sans-serif;
+  color: #bfe6fa;
+  background: linear-gradient(#2c5d75, #123547);
+  border-bottom: 1px solid #2f6b85;
+}
+
+.vd-wmp__list ol {
+  flex: 1;
+  margin: 0;
+  padding: 4px;
+  list-style: none;
+  overflow: auto;
+}
+
+.vd-wmp__track {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  padding: 6px 6px;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  background: transparent;
+  font: inherit;
+  color: #cfe9f8;
+  text-align: left;
+  cursor: pointer;
+}
+
+.vd-wmp__track:hover {
+  background: rgba(90, 190, 240, 0.18);
+}
+
+.vd-wmp__track--on {
+  border-color: #58c4ea;
+  background: linear-gradient(rgba(110, 210, 255, 0.4), rgba(30, 130, 180, 0.4));
+  color: #fff;
+}
+
+.vd-wmp__n {
+  flex: none;
+  width: 14px;
+  text-align: center;
+  color: #7fc8e8;
+  font-size: 11px;
+  padding-top: 1px;
+}
+
+.vd-wmp__tt {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.vd-wmp__tt strong {
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 1.3;
+}
+
+.vd-wmp__tt small {
+  font-size: 10.5px;
+  color: #7fa8bd;
+}
+
+.vd-wmp__info {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding: 0 14px 8px;
+  color: #a9cde0;
+}
+
+.vd-wmp__info strong {
+  font-weight: 600;
+  font-size: 13.5px;
+  color: #fff;
+}
+
+.vd-wmp__controls {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px 10px;
+  background: linear-gradient(#1d4156 0%, #0b2231 48%, #06141d 52%, #0a1c28 100%);
+  border-top: 1px solid #3c7690;
+}
+
+.vd-wmp__seek {
+  width: 100%;
+  height: 8px;
+  border-radius: 999px;
+  background: linear-gradient(#02080c, #123344);
+  box-shadow: inset 0 1px 3px #000, 0 0 0 1px #2f6b85;
+}
+
+.vd-wmp__seek i {
+  display: block;
+  width: 38%;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(#a8ffbe, #34d56b 50%, #12a04a);
+  box-shadow: 0 0 10px rgba(60, 255, 140, 0.8);
+  animation: vd-seek 12s linear infinite alternate;
+}
+
+.vd-wmp__buttons {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.vd-wmp__btn {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 1px solid #67bfe2;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 18%, #7fd8f5 0%, #2d8fbc 45%, #0b4f74 100%);
+  cursor: pointer;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), 0 2px 8px rgba(0, 0, 0, 0.6);
+  transition: box-shadow 0.15s, transform 0.12s;
+}
+
+.vd-wmp__btn svg {
+  width: 14px;
+  height: 14px;
+}
+
+.vd-wmp__btn:hover,
+.vd-wmp__btn:focus-visible {
+  outline: none;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), 0 0 14px rgba(90, 210, 255, 0.95);
+}
+
+.vd-wmp__btn:active {
+  transform: scale(0.94);
+}
+
+.vd-wmp__btn--play {
+  width: 44px;
+  height: 44px;
+  border-color: #8cf0b0;
+  background: radial-gradient(circle at 50% 18%, #b8ffd0 0%, #3ed278 45%, #0c7a3c 100%);
+}
+
+.vd-wmp__btn--play svg {
+  width: 18px;
+  height: 18px;
+}
+
+.vd-wmp__btn--play:hover,
+.vd-wmp__btn--play:focus-visible {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), 0 0 16px rgba(90, 255, 160, 0.95);
+}
+
+@media (max-width: 700px) {
+  .vd-wmp__stage {
+    flex-direction: column;
+  }
+  .vd-wmp__list {
+    width: auto;
+    max-height: 120px;
+  }
+  .vd-wmp__tab:nth-child(n + 3) {
+    display: none;
+  }
+}
+
+@keyframes vd-seek {
+  to {
+    width: 92%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vd-wmp__seek i {
+    animation: none;
+  }
+}

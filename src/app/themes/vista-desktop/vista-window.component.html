@@ -1,0 +1,79 @@
+<div
+  class="vd-win"
+  [class.vd-win--active]="active"
+  [class.vd-win--max]="win.maximized"
+  [class.vd-win--min]="win.minimized"
+  [class.vd-win--closing]="closing"
+  [class.vd-win--shake]="shaking"
+  [style.left.px]="win.x"
+  [style.top.px]="win.y"
+  [style.width.px]="win.w"
+  [style.height.px]="win.h"
+  [style.z-index]="win.z"
+  role="dialog"
+  [attr.aria-label]="win.title"
+  [attr.aria-hidden]="win.minimized ? 'true' : null"
+  (pointerdown)="focus()"
+>
+  <div class="vd-win__frame">
+    <div
+      class="vd-win__title"
+      (pointerdown)="startDrag($event)"
+      (dblclick)="toggleMaximize($event)"
+    >
+      <vd-icon [name]="win.icon" [size]="18" />
+      <span class="vd-win__text">{{ win.title }}</span>
+      <div class="vd-win__btns">
+        <button
+          type="button"
+          class="vd-cap vd-cap--min"
+          aria-label="Réduire"
+          (click)="minimize($event)"
+        >
+          <svg viewBox="0 0 12 12" aria-hidden="true">
+            <rect x="2" y="7" width="8" height="3.200" rx=".6" fill="#fff" stroke="#1e3a5c" stroke-width=".9" />
+          </svg>
+        </button>
+        <button
+          type="button"
+          class="vd-cap vd-cap--max"
+          [attr.aria-label]="win.maximized ? 'Restaurer' : 'Agrandir'"
+          (click)="toggleMaximize($event)"
+        >
+          @if (win.maximized) {
+            <svg viewBox="0 0 12 12" aria-hidden="true">
+              <rect x="3.500" y="1.600" width="6.800" height="6.200" fill="none" stroke="#1e3a5c" stroke-width="3" />
+              <rect x="3.500" y="1.600" width="6.800" height="6.200" fill="none" stroke="#fff" stroke-width="1.700" />
+              <rect x="1.600" y="4" width="6.800" height="6.200" fill="#5f8fc2" stroke="#1e3a5c" stroke-width="3" />
+              <rect x="1.600" y="4" width="6.800" height="6.200" fill="none" stroke="#fff" stroke-width="1.700" />
+            </svg>
+          } @else {
+            <svg viewBox="0 0 12 12" aria-hidden="true">
+              <rect x="1.800" y="1.800" width="8.400" height="8.400" fill="none" stroke="#1e3a5c" stroke-width="3.200" />
+              <rect x="1.800" y="1.800" width="8.400" height="8.400" fill="none" stroke="#fff" stroke-width="1.900" />
+            </svg>
+          }
+        </button>
+        <button
+          type="button"
+          class="vd-cap vd-cap--close"
+          aria-label="Fermer"
+          (click)="close($event)"
+        >
+          <svg viewBox="0 0 12 12" aria-hidden="true">
+            <path d="M2.300 2.300l7.400 7.400M9.700 2.300 2.300 9.700" stroke="#5a1006" stroke-width="3.400" stroke-linecap="round" />
+            <path d="M2.300 2.300l7.400 7.400M9.700 2.300 2.300 9.700" stroke="#fff" stroke-width="2" stroke-linecap="round" />
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div class="vd-win__client">
+      <ng-content />
+    </div>
+  </div>
+  <i class="vd-grip vd-grip--e" (pointerdown)="startResize($event, 'e')"></i>
+  <i class="vd-grip vd-grip--w" (pointerdown)="startResize($event, 'w')"></i>
+  <i class="vd-grip vd-grip--s" (pointerdown)="startResize($event, 's')"></i>
+  <i class="vd-grip vd-grip--se" (pointerdown)="startResize($event, 'se')"></i>
+  <i class="vd-grip vd-grip--sw" (pointerdown)="startResize($event, 'sw')"></i>
+</div>

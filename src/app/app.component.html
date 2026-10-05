@@ -1,9 +1,27 @@
-<app-header></app-header>
-<main class="min-h-screen pt-24 md:pt-28">
-  <app-hero></app-hero>
-  <app-competences></app-competences>
-  <app-projects></app-projects>
-  <app-timeline></app-timeline>
-  <app-contact></app-contact>
-</main>
-<app-site-footer></app-site-footer>
+@switch (theme.current()) {
+  @case ("vista-desktop") {
+    @defer (on immediate) {
+      <app-vista-desktop />
+    } @placeholder {
+      <div class="mw-loading" role="status">Chargement…</div>
+    }
+  }
+  @case ("aero-horizon") {
+    @defer (on immediate) {
+      <app-aero-horizon />
+    } @placeholder {
+      <div class="mw-loading" role="status">Chargement…</div>
+    }
+  }
+  @case ("aero-cinema") {
+    @defer (on immediate) {
+      <app-aero-cinema />
+    } @placeholder {
+      <div class="mw-loading" role="status">Chargement…</div>
+    }
+  }
+  @default {
+    <app-classic-theme />
+  }
+}
+<app-admin />

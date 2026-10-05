@@ -1,0 +1,84 @@
+<div class="vd-cp">
+  <div class="vd-cp__top">
+    <div class="vd-ex__nav">
+      <button type="button" class="vd-orb" aria-label="Accueil" [disabled]="!classic()" (click)="classic.set(false)">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5" fill="none" stroke="#fff" stroke-width="2.600" stroke-linecap="round" stroke-linejoin="round" /></svg>
+      </button>
+    </div>
+    <nav class="vd-addr" aria-label="Chemin">
+      <vd-icon name="skills" [size]="16" />
+      <span class="vd-crumb">Panneau de configuration</span>
+      <i class="vd-crumb-sep">▸</i>
+      <span class="vd-crumb vd-crumb--last">Compétences</span>
+    </nav>
+    <label class="vd-search">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="6.500" cy="6.500" r="4.500" fill="none" stroke="#5c7c9c" stroke-width="1.800" /><path d="m10 10 4 4" stroke="#5c7c9c" stroke-width="2" stroke-linecap="round" /></svg>
+      <input type="search" placeholder="Rechercher" aria-label="Rechercher une compétence" [value]="query()" (input)="onSearch($event)" />
+    </label>
+  </div>
+
+  <div class="vd-cp__body">
+    <aside class="vd-cp__tasks" aria-label="Tâches">
+      <h3 class="vd-cp__task-h">Tâches</h3>
+      <ul>
+        <li>
+          <button type="button" class="vd-link vd-link--btn" (click)="classic.set(false)">Accueil du panneau</button>
+        </li>
+        <li>
+          <button type="button" class="vd-link vd-link--btn" (click)="classic.set(true)">Affichage classique</button>
+        </li>
+      </ul>
+      <h3 class="vd-cp__task-h">Voir aussi</h3>
+      <ul>
+        <li><button type="button" class="vd-link vd-link--btn" (click)="openProjects()">Mes projets</button></li>
+        <li><button type="button" class="vd-link vd-link--btn" (click)="openContact()">Me contacter</button></li>
+      </ul>
+    </aside>
+
+    <div class="vd-cp__main">
+      <h2 class="vd-cp__title">Ajuster les compétences de Maxime</h2>
+      <p class="vd-cp__lead">
+        @if (classic()) {
+          Toutes les compétences, par ordre alphabétique.
+        } @else {
+          Choisissez une catégorie pour afficher les outils et langages maîtrisés.
+        }
+      </p>
+
+      @if (!filtered().length) {
+        <p class="vd-empty">Aucune compétence ne correspond à votre recherche.</p>
+      }
+
+      @if (!classic()) {
+        <div class="vd-cp__grid">
+          @for (entry of filtered(); track entry.area.id) {
+            <section class="vd-cat" [attr.aria-label]="entry.area.title">
+              <vd-icon [name]="icon(entry.area.id)" [size]="52" />
+              <div class="vd-cat__body">
+                <h3 class="vd-cat__title">{{ entry.area.title }}</h3>
+                <p class="vd-cat__family">{{ entry.area.family }} — {{ text(entry.area.id) }}</p>
+                <ul class="vd-cat__links">
+                  @for (skill of entry.skills; track skill) {
+                    <li>
+                      <span class="vd-link vd-skill" [class.vd-skill--flash]="flash() === skill">{{ skill }}</span>
+                    </li>
+                  }
+                </ul>
+              </div>
+            </section>
+          }
+        </div>
+      } @else {
+        <div class="vd-cp__icons">
+          @for (skill of flat(); track skill.name) {
+            <div class="vd-cpi" [class.vd-skill--flash]="flash() === skill.name" tabindex="0">
+              <vd-icon [name]="skill.icon" [size]="38" />
+              <strong>{{ skill.name }}</strong>
+              <small>{{ skill.area }}</small>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  </div>
+</div>

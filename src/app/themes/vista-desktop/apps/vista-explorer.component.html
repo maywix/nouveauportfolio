@@ -1,0 +1,203 @@
+<div class="vd-ex" (click)="viewMenu.set(false)">
+  <!-- Barre d'adresse -->
+  <div class="vd-ex__top">
+    <div class="vd-ex__nav">
+      <button type="button" class="vd-orb" aria-label="Précédent" [disabled]="!canBack()" (click)="back(); $event.stopPropagation()">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5" fill="none" stroke="#fff" stroke-width="2.600" stroke-linecap="round" stroke-linejoin="round" /></svg>
+      </button>
+      <button type="button" class="vd-orb" aria-label="Suivant" [disabled]="!canForward()" (click)="forward(); $event.stopPropagation()">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="m6 3 5 5-5 5" fill="none" stroke="#fff" stroke-width="2.600" stroke-linecap="round" stroke-linejoin="round" /></svg>
+      </button>
+    </div>
+    <nav class="vd-addr" aria-label="Chemin">
+      <vd-icon name="projects" [size]="16" />
+      <button type="button" class="vd-crumb" (click)="go('video'); $event.stopPropagation()">{{ profile.fullName }}</button>
+      <i class="vd-crumb-sep">▸</i>
+      <button type="button" class="vd-crumb" (click)="go(category()); $event.stopPropagation()">Projets</button>
+      <i class="vd-crumb-sep">▸</i>
+      <span class="vd-crumb vd-crumb--last">{{ info().label }}</span>
+    </nav>
+    <label class="vd-search">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="6.500" cy="6.500" r="4.500" fill="none" stroke="#5c7c9c" stroke-width="1.800" /><path d="m10 10 4 4" stroke="#5c7c9c" stroke-width="2" stroke-linecap="round" /></svg>
+      <input
+        type="search"
+        placeholder="Rechercher"
+        aria-label="Rechercher dans les projets"
+        [value]="query()"
+        (input)="onSearch($event)"
+        (click)="$event.stopPropagation()"
+      />
+    </label>
+  </div>
+
+  <!-- Barre de commandes -->
+  <div class="vd-cmdbar">
+    <button type="button" class="vd-cmd" [disabled]="!canOpen(selected())" (click)="open(selected()); $event.stopPropagation()">
+      <vd-icon [name]="selected()?.embedUrl ? 'player' : 'globe'" [size]="16" />
+      {{ openLabel(selected()) }}
+    </button>
+    <span class="vd-cmd-sep"></span>
+    <div class="vd-cmd-wrap">
+      <button type="button" class="vd-cmd" aria-haspopup="menu" [attr.aria-expanded]="viewMenu()" (click)="viewMenu.set(!viewMenu()); $event.stopPropagation()">
+        Affichage : {{ viewLabel[view()] }} <i class="vd-caret">▾</i>
+      </button>
+      @if (viewMenu()) {
+        <ul class="vd-menu" role="menu">
+          @for (mode of viewModes; track mode) {
+            <li>
+              <button type="button" role="menuitemradio" [attr.aria-checked]="view() === mode" (click)="setView(mode); $event.stopPropagation()">
+                <span class="vd-menu__dot">{{ view() === mode ? "●" : "" }}</span>
+                {{ viewLabel[mode] }}
+              </button>
+            </li>
+          }
+        </ul>
+      }
+    </div>
+  </div>
+
+  <div class="vd-ex__main">
+    <!-- Volet de navigation -->
+    <aside class="vd-ex__nav-pane" aria-label="Liens favoris">
+      <h3 class="vd-pane-h">Liens favoris</h3>
+      <ul>
+        @for (cat of categories; track cat.value) {
+          <li>
+            <button
+              type="button"
+              class="vd-fav"
+              [class.vd-fav--on]="category() === cat.value"
+              (click)="go(cat.value); $event.stopPropagation()"
+            >
+              <vd-icon [name]="icon(cat.value)" [size]="20" />
+              {{ cat.short }}
+            </button>
+          </li>
+        }
+      </ul>
+      <h3 class="vd-pane-h">Dossiers</h3>
+      <div class="vd-tree">
+        <span class="vd-tree__row"><vd-icon name="projects" [size]="16" /> Projets</span>
+        @for (cat of categories; track cat.value) {
+          <span class="vd-tree__row vd-tree__row--child" [class.vd-tree__row--on]="category() === cat.value">
+            <vd-icon name="projects" [size]="14" /> {{ cat.short }}
+          </span>
+        }
+      </div>
+    </aside>
+
+    <!-- Contenu -->
+    <div
+      class="vd-ex__content"
+      tabindex="0"
+      role="listbox"
+      aria-label="Éléments du dossier"
+      (click)="selected.set(null)"
+      (keydown)="onKey($event)"
+    >
+      @if (!items().length) {
+        <p class="vd-empty">Aucun élément ne correspond à votre recherche.</p>
+      }
+
+      @for (group of groups(); track group.title) {
+        <section class="vd-group">
+          <h3 class="vd-group__h">
+            {{ group.title }}
+            <span class="vd-group__n">({{ group.items.length }})</span>
+          </h3>
+          @if (group.description && view() === "tiles") {
+            <p class="vd-group__d">{{ group.description }}</p>
+          }
+
+          @switch (view()) {
+            @case ("tiles") {
+              <div class="vd-items vd-items--tiles">
+                @for (item of group.items; track item.title) {
+                  <button
+                    type="button"
+                    role="option"
+                    class="vd-item"
+                    [class.vd-item--on]="selected() === item"
+                    [attr.aria-selected]="selected() === item"
+                    (click)="select(item, $event)"
+                    (dblclick)="open(item)"
+                  >
+                    <span class="vd-thumb" [style.--h]="hue(item)">
+                      <vd-icon [name]="icon(item.category)" [size]="40" />
+                    </span>
+                    <span class="vd-item__name">{{ item.title }}</span>
+                    <span class="vd-item__type">{{ item.kind }}</span>
+                  </button>
+                }
+              </div>
+            }
+            @case ("list") {
+              <div class="vd-items vd-items--list">
+                @for (item of group.items; track item.title) {
+                  <button
+                    type="button"
+                    role="option"
+                    class="vd-row"
+                    [class.vd-item--on]="selected() === item"
+                    [attr.aria-selected]="selected() === item"
+                    (click)="select(item, $event)"
+                    (dblclick)="open(item)"
+                  >
+                    <vd-icon [name]="icon(item.category)" [size]="18" />
+                    {{ item.title }}
+                  </button>
+                }
+              </div>
+            }
+            @case ("details") {
+              <div class="vd-table" role="presentation">
+                @for (item of group.items; track item.title) {
+                  <button
+                    type="button"
+                    role="option"
+                    class="vd-trow"
+                    [class.vd-item--on]="selected() === item"
+                    [attr.aria-selected]="selected() === item"
+                    (click)="select(item, $event)"
+                    (dblclick)="open(item)"
+                  >
+                    <span class="vd-tcell vd-tcell--name">
+                      <vd-icon [name]="icon(item.category)" [size]="18" />
+                      {{ item.title }}
+                    </span>
+                    <span class="vd-tcell vd-tcell--type">{{ item.kind }}</span>
+                    <span class="vd-tcell vd-tcell--desc">{{ item.description }}</span>
+                  </button>
+                }
+              </div>
+            }
+          }
+        </section>
+      }
+    </div>
+  </div>
+
+  <!-- Volet de détails -->
+  <footer class="vd-ex__details">
+    @if (selected(); as item) {
+      <span class="vd-thumb vd-thumb--sm" [style.--h]="hue(item)">
+        <vd-icon [name]="icon(item.category)" [size]="30" />
+      </span>
+      <div class="vd-details__txt">
+        <strong>{{ item.title }}</strong>
+        <span><em>Type :</em> {{ item.kind }} · <em>Groupe :</em> {{ item.group }}</span>
+        <span class="vd-details__desc">{{ item.description }}</span>
+        @if (item.link) {
+          <a class="vd-link" [href]="item.link" target="_blank" rel="noopener noreferrer">{{ item.link }}</a>
+        }
+      </div>
+    } @else {
+      <vd-icon name="projects" [size]="46" />
+      <div class="vd-details__txt">
+        <strong>{{ info().label }}</strong>
+        <span>{{ items().length }} élément{{ items().length > 1 ? "s" : "" }}</span>
+        <span class="vd-details__desc">Sélectionnez un élément pour afficher ses détails ; double-cliquez pour l'ouvrir.</span>
+      </div>
+    }
+  </footer>
+</div>

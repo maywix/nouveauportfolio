@@ -1,0 +1,407 @@
+<div class="vd" [class.vd--compact]="wm.compact()" (keydown.escape)="onEscape()">
+  <vd-sprite />
+
+  <!-- Fond d'écran « Aurora » -->
+  <div class="vd-wall" aria-hidden="true">
+    <svg class="vdw vdw--a" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">
+      <defs>
+        <linearGradient id="vdw-r1" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stop-color="#1fe0b0" stop-opacity="0" />
+          <stop offset=".3" stop-color="#3dffc4" stop-opacity=".85" />
+          <stop offset=".65" stop-color="#2fb8ff" stop-opacity=".7" />
+          <stop offset="1" stop-color="#2fb8ff" stop-opacity="0" />
+        </linearGradient>
+        <linearGradient id="vdw-r2" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stop-color="#b6ff7a" stop-opacity="0" />
+          <stop offset=".35" stop-color="#7dffb4" stop-opacity=".7" />
+          <stop offset=".7" stop-color="#27d8d0" stop-opacity=".6" />
+          <stop offset="1" stop-color="#27d8d0" stop-opacity="0" />
+        </linearGradient>
+      </defs>
+      <path d="M-260 780C130 540 420 860 780 580S1260 260 1900 430" fill="none" stroke="url(#vdw-r1)" stroke-width="170" stroke-linecap="round" />
+      <path d="M-260 860C240 720 520 930 920 720S1420 520 1900 650" fill="none" stroke="url(#vdw-r2)" stroke-width="120" stroke-linecap="round" />
+      <path d="M-200 420C200 300 560 440 900 300S1400 140 1900 260" fill="none" stroke="url(#vdw-r1)" stroke-width="110" stroke-linecap="round" opacity=".55" />
+    </svg>
+    <svg class="vdw vdw--b" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">
+      <defs>
+        <linearGradient id="vdw-r3" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stop-color="#fff" stop-opacity="0" />
+          <stop offset=".45" stop-color="#c8fff0" stop-opacity=".9" />
+          <stop offset="1" stop-color="#8fe8ff" stop-opacity="0" />
+        </linearGradient>
+      </defs>
+      <path d="M-100 700C250 520 560 760 880 560S1380 340 1800 470" fill="none" stroke="url(#vdw-r3)" stroke-width="34" stroke-linecap="round" />
+      <path d="M-100 780C300 650 600 830 960 650S1420 470 1800 560" fill="none" stroke="url(#vdw-r3)" stroke-width="20" stroke-linecap="round" opacity=".7" />
+    </svg>
+    <svg class="vdw vdw--c" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">
+      <g fill="none" stroke="#fff" stroke-linecap="round">
+        <path d="M-100 650C260 470 570 720 890 520S1390 300 1800 430" stroke-opacity=".34" stroke-width="1.600" />
+        <path d="M-100 690C260 520 580 760 900 560S1400 350 1800 470" stroke-opacity=".2" stroke-width="1.100" />
+        <path d="M-100 740C280 590 600 800 930 610S1410 410 1800 520" stroke-opacity=".26" stroke-width="1.300" />
+        <path d="M-100 380C220 270 590 410 910 270S1380 130 1800 250" stroke-opacity=".18" stroke-width="1" />
+        <path d="M-100 820C320 700 620 870 980 690S1430 520 1800 610" stroke-opacity=".16" stroke-width="1.200" />
+      </g>
+    </svg>
+    <div class="vd-wall__glow vd-wall__glow--l"></div>
+    <div class="vd-wall__glow vd-wall__glow--r"></div>
+  </div>
+
+  <!-- Zone de bureau -->
+  <div #desk class="vd-desk" (pointerdown)="onDeskDown($event)">
+    <ul class="vd-icons">
+      @for (icon of icons; track icon.id) {
+        <li>
+          <button
+            type="button"
+            class="vd-dicon"
+            [class.vd-dicon--on]="selectedIcon() === icon.id"
+            (click)="onIconClick(icon)"
+            (dblclick)="icon.run()"
+            (keydown.enter)="icon.run()"
+          >
+            <vd-icon [name]="icon.icon" [size]="48" />
+            <span class="vd-dicon__label">{{ icon.label }}</span>
+          </button>
+        </li>
+      }
+    </ul>
+
+    <!-- Sidebar & gadgets -->
+    <aside class="vd-sidebar" aria-label="Gadgets">
+      <section class="vd-gadget vd-gadget--clock" aria-label="Horloge">
+        <vd-clock />
+      </section>
+
+      <section class="vd-gadget vd-gadget--cal" aria-label="Calendrier">
+        <h3>{{ calendar.title }}</h3>
+        <div class="vd-cal">
+          @for (d of ["L", "M", "M", "J", "V", "S", "D"]; track $index) {
+            <b>{{ d }}</b>
+          }
+          @for (day of calendar.days; track $index) {
+            <span [class.vd-cal__today]="day.today">{{ day.n }}</span>
+          }
+        </div>
+      </section>
+
+      <section class="vd-gadget vd-gadget--status" aria-label="Disponibilité">
+        <h3>Disponibilité</h3>
+        <p><span class="vd-led" aria-hidden="true"></span> {{ profile.availability }}</p>
+      </section>
+
+      <section class="vd-gadget vd-gadget--note" aria-label="Note">
+        <p>{{ profile.about }}</p>
+      </section>
+    </aside>
+
+    @for (w of wm.windows(); track w.id) {
+      <vd-window [win]="w" [active]="wm.activeId() === w.id">
+        @switch (w.id) {
+          @case ("welcome") {
+            <vd-welcome />
+          }
+          @case ("explorer") {
+            <vd-explorer [props]="w.props" />
+          }
+          @case ("control") {
+            <vd-control [props]="w.props" />
+          }
+          @case ("mail") {
+            <vd-mail [props]="w.props" />
+          }
+          @case ("messenger") {
+            <vd-messenger />
+          }
+          @case ("player") {
+            <vd-player [props]="w.props" />
+          }
+        }
+      </vd-window>
+    }
+  </div>
+
+  <!-- Menu Démarrer -->
+  @if (startOpen()) {
+    <div class="vd-scrim" (pointerdown)="closeStart()"></div>
+    <section class="vd-start" role="dialog" aria-label="Menu Démarrer">
+      <div class="vd-start__user" aria-hidden="true">
+        <app-aero-buddy tone="green" />
+      </div>
+
+      <div class="vd-start__left">
+        @if (!query()) {
+          <ul class="vd-start__pinned">
+            @for (p of pinned; track p.app) {
+              <li>
+                <button type="button" class="vd-sitem" (click)="openApp(p.app)">
+                  <vd-icon [name]="appDefs[p.app].icon" [size]="34" />
+                  <span class="vd-sitem__txt">
+                    <strong>{{ shortLabel[p.app] }}</strong>
+                    <small>{{ p.text }}</small>
+                  </span>
+                </button>
+              </li>
+            }
+            <li>
+              <button type="button" class="vd-sitem" (click)="downloadCvFromStart()">
+                <vd-icon name="pdf" [size]="34" />
+                <span class="vd-sitem__txt">
+                  <strong>Mon CV</strong>
+                  <small>Télécharger le PDF</small>
+                </span>
+              </button>
+            </li>
+          </ul>
+          <div class="vd-start__sep"></div>
+          <button type="button" class="vd-start__all" [attr.aria-expanded]="allPrograms()" (click)="allPrograms.set(!allPrograms())">
+            <span class="vd-start__arrow">{{ allPrograms() ? "◂" : "▸" }}</span>
+            Tous les programmes
+          </button>
+          @if (allPrograms()) {
+            <ul class="vd-start__all-list">
+              <li><a class="vd-slink" [href]="profile.github" target="_blank" rel="noopener noreferrer"><vd-icon name="github" [size]="16" /> GitHub</a></li>
+              <li><a class="vd-slink" [href]="profile.linkedin" target="_blank" rel="noopener noreferrer"><vd-icon name="linkedin" [size]="16" /> LinkedIn</a></li>
+              <li><a class="vd-slink" [href]="'mailto:' + profile.email"><vd-icon name="mail" [size]="16" /> {{ profile.email }}</a></li>
+              @if (theme.isAdmin()) {
+                <li><button type="button" class="vd-slink" (click)="openAdmin()"><vd-icon name="skills" [size]="16" /> Personnalisation (admin)</button></li>
+              }
+            </ul>
+          }
+        } @else {
+          <ul class="vd-start__results" role="listbox" aria-label="Résultats de la recherche">
+            @for (r of results(); track $index) {
+              <li>
+                <button type="button" class="vd-sitem vd-sitem--sm" (click)="runFromStart(r.run)">
+                  <vd-icon [name]="r.icon" [size]="26" />
+                  <span class="vd-sitem__txt">
+                    <strong>{{ r.label }}</strong>
+                    <small>{{ r.hint }}</small>
+                  </span>
+                </button>
+              </li>
+            } @empty {
+              <li class="vd-start__none">Aucun résultat.</li>
+            }
+          </ul>
+        }
+        <label class="vd-start__search">
+          <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="6.500" cy="6.500" r="4.500" fill="none" stroke="#5c7c9c" stroke-width="1.800" /><path d="m10 10 4 4" stroke="#5c7c9c" stroke-width="2" stroke-linecap="round" /></svg>
+          <input
+            #searchInput
+            type="search"
+            placeholder="Rechercher dans le portfolio"
+            aria-label="Rechercher dans le portfolio"
+            [value]="query()"
+            (input)="onSearch($event)"
+            (keydown.enter)="onSearchEnter()"
+          />
+        </label>
+      </div>
+
+      <div class="vd-start__right">
+        <p class="vd-start__name">Maxime</p>
+        <ul class="vd-start__links">
+          <li><button type="button" (click)="openApp('explorer')">Projets</button></li>
+          <li><button type="button" (click)="openApp('control')">Compétences</button></li>
+          <li><button type="button" (click)="openApp('mail')">Parcours</button></li>
+          <li><button type="button" (click)="openApp('messenger')">Contact</button></li>
+          <li><button type="button" (click)="openApp('player')">Lecteur multimédia</button></li>
+        </ul>
+        <ul class="vd-start__links vd-start__links--ext">
+          <li><a [href]="profile.github" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+          <li><a [href]="profile.linkedin" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+        </ul>
+        <div class="vd-start__power">
+          @if (theme.isAdmin()) {
+            <button type="button" class="vd-pbtn vd-pbtn--lock" aria-label="Personnalisation (admin)" title="Personnalisation (admin)" (click)="openAdmin()">
+              <svg viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="7" width="10" height="7" rx="1.500" fill="#fff" /><path d="M5 7V5a3 3 0 0 1 6 0v2" fill="none" stroke="#fff" stroke-width="1.700" /></svg>
+            </button>
+          }
+          <button
+            type="button"
+            class="vd-pbtn"
+            [attr.aria-label]="theme.isAdmin() ? 'Quitter le thème (mode normal)' : 'Redémarrer'"
+            [title]="theme.isAdmin() ? 'Quitter le thème (mode normal)' : 'Redémarrer'"
+            (click)="shutdown()"
+          >
+            <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.500v6" stroke="#fff" stroke-width="2" stroke-linecap="round" /><path d="M4.600 3.800a5.500 5.500 0 1 0 6.800 0" fill="none" stroke="#fff" stroke-width="1.800" stroke-linecap="round" /></svg>
+          </button>
+        </div>
+      </div>
+    </section>
+  }
+
+  <!-- Barre des tâches -->
+  <footer class="vd-taskbar">
+    <button
+      type="button"
+      class="vd-orb-start"
+      [class.vd-orb-start--on]="startOpen()"
+      aria-label="Démarrer"
+      [attr.aria-expanded]="startOpen()"
+      (click)="toggleStart()"
+    >
+      <svg viewBox="0 0 64 64" aria-hidden="true">
+        <defs>
+          <radialGradient id="vdo-b" cx="50%" cy="85%" r="80%">
+            <stop offset="0" stop-color="#7fe0ff" />
+            <stop offset=".5" stop-color="#1b86d6" />
+            <stop offset="1" stop-color="#0a3a86" />
+          </radialGradient>
+          <linearGradient id="vdo-g" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#fff" stop-opacity=".95" />
+            <stop offset="1" stop-color="#fff" stop-opacity=".05" />
+          </linearGradient>
+          <linearGradient id="vdo-p" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#fff" />
+            <stop offset="1" stop-color="#bfe6ff" />
+          </linearGradient>
+        </defs>
+        <circle cx="32" cy="32" r="29" fill="url(#vdo-b)" stroke="#d7f1ff" stroke-opacity=".9" stroke-width="1.500" />
+        <circle cx="32" cy="32" r="29.800" fill="none" stroke="#04204a" stroke-opacity=".8" />
+        <g fill="url(#vdo-p)" stroke="#0a4a96" stroke-opacity=".55">
+          <circle cx="24.500" cy="25" r="7.200" />
+          <circle cx="39.500" cy="25" r="7.200" />
+          <circle cx="24.500" cy="40" r="7.200" />
+          <circle cx="39.500" cy="40" r="7.200" />
+        </g>
+        <path d="M6 30C6 14 17 4 32 4s26 10 26 26c-14 11-38 11-52 0Z" fill="url(#vdo-g)" opacity=".8" />
+      </svg>
+    </button>
+
+    <div class="vd-quick">
+      <button type="button" class="vd-qbtn-task" aria-label="Afficher le bureau" title="Afficher le bureau" (click)="showDesktop()">
+        <svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2" y="3.500" width="16" height="11" rx="1.500" fill="#3f8fd6" stroke="#e6f4ff" /><rect x="4" y="5.500" width="12" height="7" fill="#b9e4ff" opacity=".8" /><rect x="7" y="16" width="6" height="1.800" fill="#e6f4ff" /></svg>
+      </button>
+      <button type="button" class="vd-qbtn-task" aria-label="Basculer entre les fenêtres (Flip 3D)" title="Flip 3D" (click)="openFlip()">
+        <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 5.500 10 3v13l-7-2Z" fill="#74c2f2" stroke="#e6f4ff" stroke-linejoin="round" /><path d="m10 3 7 2.500v9L10 16Z" fill="#2f78c4" stroke="#e6f4ff" stroke-linejoin="round" /></svg>
+      </button>
+    </div>
+
+    <div class="vd-tasks" role="toolbar" aria-label="Fenêtres ouvertes">
+      @for (w of wm.windows(); track w.id) {
+        <button
+          type="button"
+          class="vd-task"
+          [class.vd-task--on]="wm.activeId() === w.id"
+          [class.vd-task--min]="w.minimized"
+          [attr.data-vd-task]="w.id"
+          [title]="w.title"
+          (click)="wm.toggleFromTaskbar(w.id)"
+          (pointermove)="glow($event)"
+        >
+          <vd-icon [name]="w.icon" [size]="20" />
+          <span class="vd-task__label">{{ shortLabel[w.id] }}</span>
+        </button>
+      }
+    </div>
+
+    <div class="vd-tray">
+      <svg class="vd-tray__ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 6.500h3L9 3v10L5 9.500H2Z" fill="#e6f4ff" /><path d="M11 5.500a3.600 3.600 0 0 1 0 5M12.600 3.800a6 6 0 0 1 0 8.400" fill="none" stroke="#e6f4ff" stroke-width="1.200" stroke-linecap="round" /></svg>
+      <svg class="vd-tray__ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M1.500 6.200a9 9 0 0 1 13 0M3.700 8.600a5.800 5.800 0 0 1 8.600 0M6 11a2.600 2.600 0 0 1 4 0" fill="none" stroke="#e6f4ff" stroke-width="1.400" stroke-linecap="round" /><circle cx="8" cy="13" r="1.100" fill="#e6f4ff" /></svg>
+      <vd-tray-clock />
+    </div>
+    <button type="button" class="vd-showdesk" aria-label="Afficher le bureau" (click)="showDesktop()"></button>
+  </footer>
+
+  <!-- Flip 3D -->
+  @if (flipOpen()) {
+    <div
+      #flipLayer
+      class="vd-flip"
+      tabindex="-1"
+      role="dialog"
+      aria-label="Basculer entre les fenêtres"
+      (keydown)="onFlipKey($event)"
+      (wheel)="onFlipWheel($event)"
+      (click)="flipOpen.set(false)"
+    >
+      <div class="vd-flip__stage">
+        @for (w of flipWindows(); track w.id; let i = $index) {
+          <button
+            type="button"
+            class="vd-flipcard"
+            [class.vd-flipcard--front]="flipRel(i) === 0"
+            [style.--rel]="flipRel(i)"
+            [style.--n]="flipWindows().length"
+            [attr.aria-label]="w.title"
+            (click)="flipCommit(i); $event.stopPropagation()"
+          >
+            <span class="vd-flipcard__bar">
+              <vd-icon [name]="w.icon" [size]="16" />
+              <span>{{ w.title }}</span>
+            </span>
+            <span class="vd-flipcard__body">
+              <vd-icon [name]="w.icon" [size]="86" />
+              <strong>{{ shortLabel[w.id] }}</strong>
+            </span>
+          </button>
+        }
+      </div>
+      @if (flipWindows()[flipIndex()]; as current) {
+        <p class="vd-flip__title">{{ current.title }}</p>
+      }
+      <p class="vd-flip__hint">← → ou molette pour naviguer · Entrée pour ouvrir · Échap pour annuler</p>
+    </div>
+  }
+
+  <!-- Boîte de copie (téléchargement du CV) -->
+  @if (copyProgress() !== null) {
+    <div class="vd-modal-scrim"></div>
+    <div class="vd-dialog" role="alertdialog" aria-label="Copie en cours">
+      <div class="vd-dialog__title">
+        <vd-icon name="pdf" [size]="16" />
+        <span>Copie en cours…</span>
+      </div>
+      <div class="vd-dialog__body">
+        <p class="vd-dialog__h">Copie de 1 élément</p>
+        <p class="vd-dialog__sub">de <strong>le portfolio</strong> vers <strong>vos Téléchargements</strong></p>
+        <div class="vd-progress" role="progressbar" [attr.aria-valuenow]="copyProgress()" aria-valuemin="0" aria-valuemax="100">
+          <i [style.width.%]="copyProgress()"></i>
+        </div>
+        <p class="vd-dialog__sub">CV-Maxime-Farruggia.pdf — {{ copyProgress()! | number: "1.0-0" }} %</p>
+      </div>
+    </div>
+  }
+
+  <!-- Corbeille -->
+  @if (trashOpen()) {
+    <div class="vd-modal-scrim" (click)="trashOpen.set(false)"></div>
+    <div class="vd-dialog" role="dialog" aria-label="Corbeille">
+      <div class="vd-dialog__title">
+        <vd-icon name="trash" [size]="16" />
+        <span>Corbeille</span>
+        <button type="button" class="vd-dialog__x" aria-label="Fermer" (click)="trashOpen.set(false)">✕</button>
+      </div>
+      <div class="vd-dialog__body vd-dialog__body--row">
+        <vd-icon name="trash" [size]="52" />
+        <div>
+          <p class="vd-dialog__h">La Corbeille est vide.</p>
+          <p class="vd-dialog__sub">Rien à restaurer : tout est bien rangé dans les projets.</p>
+          <button type="button" class="vd-sendbtn" (click)="trashOpen.set(false)">OK</button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- Écran de bienvenue -->
+  @if (bootState() !== "off") {
+    <div class="vd-boot" [class.vd-boot--out]="bootState() === 'out'" role="status" (click)="finishBoot()">
+      <div class="vd-boot__center">
+        <div class="vd-boot__tile"><app-aero-buddy tone="green" /></div>
+        <p class="vd-boot__name">{{ profile.fullName }}</p>
+        <p class="vd-boot__hello">Bienvenue</p>
+        <span class="vd-boot__spin" aria-hidden="true"></span>
+      </div>
+      <p class="vd-boot__skip">Cliquez pour passer</p>
+    </div>
+  }
+
+  <!-- Arrêt / redémarrage -->
+  @if (shutting()) {
+    <div class="vd-shutdown" role="status">
+      <span class="vd-boot__spin" aria-hidden="true"></span>
+      <p>{{ shutting() === "normal" ? "Arrêt en cours…" : "Redémarrage…" }}</p>
+    </div>
+  }
+</div>

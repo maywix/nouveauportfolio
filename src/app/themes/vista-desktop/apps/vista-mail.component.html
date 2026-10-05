@@ -1,0 +1,94 @@
+<div class="vd-mail">
+  <div class="vd-cmdbar">
+    <a class="vd-cmd" [href]="newMessage()">
+      <vd-icon name="mail" [size]="16" />
+      Nouveau message
+    </a>
+    <a class="vd-cmd" [class.vd-cmd--off]="!selected()" [href]="askAbout(selected())">
+      Poser une question à ce sujet
+    </a>
+    <span class="vd-cmd-sep"></span>
+    <span class="vd-mail__count">{{ unread() }} non lu{{ unread() > 1 ? "s" : "" }}</span>
+  </div>
+
+  <div class="vd-mail__main">
+    <aside class="vd-mail__folders" aria-label="Dossiers">
+      <h3 class="vd-pane-h">Dossiers locaux</h3>
+      <ul>
+        @for (f of folders; track f.id) {
+          <li>
+            <button
+              type="button"
+              class="vd-fav"
+              [class.vd-fav--on]="folder() === f.id"
+              (click)="go(f.id)"
+            >
+              <vd-icon [name]="f.id === 'inbox' ? 'mail' : 'projects'" [size]="18" />
+              <span class="vd-mail__flabel">{{ f.label }}</span>
+              <span class="vd-mail__fcount">({{ f.count }})</span>
+            </button>
+          </li>
+        }
+      </ul>
+    </aside>
+
+    <div class="vd-mail__right">
+      <div class="vd-mail__list" role="listbox" tabindex="0" [attr.aria-label]="folderTitle()" (keydown)="onKey($event)">
+        <div class="vd-mail__head" role="presentation">
+          <span></span>
+          <span>De</span>
+          <span>Objet</span>
+          <span>Reçu</span>
+        </div>
+        @for (m of messages(); track m.title) {
+          <button
+            type="button"
+            role="option"
+            class="vd-mrow"
+            [class.vd-mrow--unread]="isUnread(m)"
+            [class.vd-item--on]="selected() === m"
+            [attr.aria-selected]="selected() === m"
+            (click)="choose(m)"
+          >
+            <span class="vd-mrow__ico">
+              <svg viewBox="0 0 16 12" aria-hidden="true">
+                @if (isUnread(m)) {
+                  <rect x=".5" y=".5" width="15" height="11" rx="1.500" fill="#fff4b8" stroke="#a88a1a" />
+                  <path d="m1 1.500 7 5.500 7-5.500" fill="none" stroke="#a88a1a" />
+                } @else {
+                  <path d="M1 5 8 .8 15 5v6.500H1Z" fill="#e8eef5" stroke="#7d8da0" />
+                  <path d="m1 5 7 4.500L15 5" fill="none" stroke="#7d8da0" />
+                }
+              </svg>
+            </span>
+            <span class="vd-mrow__cell">{{ m.organisation }}</span>
+            <span class="vd-mrow__cell">{{ m.title }}</span>
+            <span class="vd-mrow__cell">{{ m.period }}</span>
+          </button>
+        }
+      </div>
+
+      <article class="vd-mail__preview" aria-live="polite">
+        @if (selected(); as m) {
+          <header class="vd-mail__phead">
+            <h2>{{ m.title }}</h2>
+            <dl>
+              <dt>De :</dt>
+              <dd>{{ m.organisation }}</dd>
+              <dt>Date :</dt>
+              <dd>{{ m.period }}</dd>
+              <dt>Dossier :</dt>
+              <dd>{{ kindLabel(m) }}</dd>
+            </dl>
+          </header>
+          <p class="vd-mail__body">{{ m.details }}</p>
+        } @else {
+          <div class="vd-mail__none">
+            <vd-icon name="mail" [size]="54" />
+            <p>Sélectionnez un message pour le lire.</p>
+          </div>
+        }
+      </article>
+    </div>
+  </div>
+</div>

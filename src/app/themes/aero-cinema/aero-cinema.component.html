@@ -1,0 +1,470 @@
+<ng-template #glyph let-id>
+  <svg viewBox="0 0 48 48" fill="none" stroke="#fff" stroke-width="2.600" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    @switch (areaGlyph(id)) {
+      @case ("palette") {
+        <path d="M24 6C13 6 5 13.500 5 23c0 9 7 17 17 17 4 0 5-3 3-5-2-3 0-6 4-6h6c5 0 8-3 8-8C43 13 34 6 24 6Z" /><circle cx="15" cy="22" r="2.400" /><circle cx="23" cy="14" r="2.400" /><circle cx="33" cy="18" r="2.400" />
+      }
+      @case ("film") {
+        <rect x="5" y="10" width="38" height="28" rx="5" /><path d="M20 18v12l11-6Z" />
+      }
+      @case ("sliders") {
+        <path d="M8 14h32M8 24h32M8 34h32" /><circle cx="18" cy="14" r="4" fill="#fff" /><circle cx="32" cy="24" r="4" fill="#fff" /><circle cx="22" cy="34" r="4" fill="#fff" />
+      }
+      @case ("globe") {
+        <circle cx="24" cy="24" r="18" /><ellipse cx="24" cy="24" rx="8" ry="18" /><path d="M6 24h36M9 15h30M9 33h30" />
+      }
+      @case ("db") {
+        <ellipse cx="24" cy="12" rx="15" ry="6" /><path d="M9 12v24c0 3.300 6.700 6 15 6s15-2.700 15-6V12M9 24c0 3.300 6.700 6 15 6s15-2.700 15-6" />
+      }
+      @default {
+        <path d="m24 8 18 9-18 9-18-9Z" /><path d="m6 25 18 9 18-9M6 33l18 9 18-9" />
+      }
+    }
+  </svg>
+</ng-template>
+
+<div class="ac" [class.ac--calm]="calm()">
+  <!-- ======================= Fond « aurore » ======================= -->
+  <div class="ac-bg" aria-hidden="true">
+    <div class="ac-aurora">
+      <i class="ac-aurora__a"></i>
+      <i class="ac-aurora__b"></i>
+      <i class="ac-aurora__c"></i>
+    </div>
+    <div class="ac-shafts"><i></i><i></i><i></i></div>
+    <svg class="ac-waves" viewBox="0 0 1600 360" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="acw-1" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#3dffa4" stop-opacity=".34" />
+          <stop offset="1" stop-color="#3dffa4" stop-opacity="0" />
+        </linearGradient>
+        <linearGradient id="acw-2" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#2fd0ff" stop-opacity=".3" />
+          <stop offset="1" stop-color="#2fd0ff" stop-opacity="0" />
+        </linearGradient>
+        <linearGradient id="acw-e" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stop-color="#9dffd4" stop-opacity="0" />
+          <stop offset=".5" stop-color="#d6fff0" stop-opacity=".95" />
+          <stop offset="1" stop-color="#9dffd4" stop-opacity="0" />
+        </linearGradient>
+      </defs>
+      <g class="ac-waves__a">
+        <path d="M-100 210C160 120 420 290 700 200S1220 110 1700 220V360H-100Z" fill="url(#acw-1)" />
+        <path d="M-100 210C160 120 420 290 700 200S1220 110 1700 220" fill="none" stroke="url(#acw-e)" stroke-width="2.200" />
+      </g>
+      <g class="ac-waves__b">
+        <path d="M-100 250C200 190 480 310 760 240S1240 190 1700 260V360H-100Z" fill="url(#acw-2)" />
+        <path d="M-100 250C200 190 480 310 760 240S1240 190 1700 260" fill="none" stroke="url(#acw-e)" stroke-width="1.600" opacity=".8" />
+      </g>
+    </svg>
+    <div class="ac-vignette"></div>
+  </div>
+
+  <!-- ======================= Barre supérieure ======================= -->
+  <header class="ac-top">
+    <button type="button" class="ac-orb ac-orb--back" [attr.aria-label]="page() === 'accueil' ? 'Accueil' : 'Retour à l\'accueil'" (click)="go('accueil')">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5 8 12l7 7" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" /></svg>
+    </button>
+    <p class="ac-brand">{{ profile.fullName }}</p>
+    <div class="ac-clock" aria-label="Heure">
+      <strong>{{ clock }}</strong>
+      <span>{{ date }}</span>
+    </div>
+  </header>
+
+  <!-- ======================= Menu géant ======================= -->
+  <nav class="ac-strip" aria-label="Sections">
+    <div class="ac-strip__track" [style.transform]="'translateX(' + shift() + 'px)'">
+      @for (p of pages; track p.id) {
+        <button
+          #stripItem
+          type="button"
+          class="ac-strip__item"
+          [class.ac-strip__item--on]="page() === p.id"
+          [attr.aria-current]="page() === p.id ? 'page' : null"
+          (click)="go(p.id)"
+        >
+          {{ p.label }}
+        </button>
+      }
+    </div>
+  </nav>
+
+  <!-- ======================= Scène ======================= -->
+  <main class="ac-stage">
+    @switch (page()) {
+      <!-- ------------------------- ACCUEIL ------------------------- -->
+      @case ("accueil") {
+        <section class="ac-page ac-home" aria-label="Accueil">
+          <div class="ac-home__text">
+            <p class="ac-kicker">bienvenue</p>
+            <h1 class="ac-name">
+              <span>Maxime</span>
+              <span>Farruggia</span>
+            </h1>
+            <p class="ac-role">{{ profile.role }}</p>
+            <p class="ac-about">{{ profile.about }}</p>
+            <ul class="ac-lozenges" aria-label="Spécialités">
+              @for (chip of profile.chips; track chip) {
+                <li>{{ chip }}</li>
+              }
+            </ul>
+            <div class="ac-cta">
+              <button type="button" class="ac-btn ac-btn--green" (click)="go('projets')">Voir mes projets</button>
+              <button type="button" class="ac-btn" (click)="go('contact')">Me contacter</button>
+            </div>
+            <p class="ac-avail"><span class="ac-led" aria-hidden="true"></span>{{ profile.availability }}</p>
+          </div>
+
+          <div class="ac-home__art" aria-hidden="true">
+            <div class="ac-home__glow"></div>
+            @if (!imgFailed()) {
+              <img
+                class="ac-home__img"
+                src="assets/aero/buddy-green.webp"
+                alt=""
+                width="622"
+                height="820"
+                (error)="imgFailed.set(true)"
+              />
+            } @else {
+              <div class="ac-home__svg"><app-aero-buddy tone="green" /></div>
+            }
+            <div class="ac-home__floor"></div>
+          </div>
+        </section>
+      }
+
+      <!-- ------------------------- PROJETS ------------------------- -->
+      @case ("projets") {
+        <section class="ac-page ac-projects" aria-label="Projets">
+          <ul class="ac-cats" role="tablist" aria-label="Catégories">
+            @for (cat of categories; track cat.value) {
+              <li>
+                <button
+                  type="button"
+                  role="tab"
+                  class="ac-cat"
+                  [class.ac-cat--on]="category() === cat.value"
+                  [attr.aria-selected]="category() === cat.value"
+                  (click)="pick(cat.value)"
+                >
+                  {{ cat.label }}
+                </button>
+              </li>
+            }
+          </ul>
+
+          <div class="ac-showcase">
+            <div
+              class="ac-flow"
+              role="listbox"
+              aria-label="Projets"
+              (pointerdown)="onFlowDown($event)"
+              (pointerup)="onFlowUp($event)"
+              (wheel)="onFlowWheel($event)"
+            >
+              @for (item of items(); track item.title; let i = $index) {
+                <button
+                  type="button"
+                  role="option"
+                  class="ac-cover"
+                  [class.ac-cover--on]="i === index()"
+                  [class.ac-cover--far]="i - index() > 3 || i - index() < -3"
+                  [attr.aria-selected]="i === index()"
+                  [attr.aria-label]="item.title"
+                  [attr.tabindex]="i === index() ? 0 : -1"
+                  [style.--o]="i - index()"
+                  [style.--h]="hue(item)"
+                  (click)="i === index() ? activate(item) : index.set(i)"
+                >
+                  <span class="ac-cover__art">
+                    <span class="ac-cover__n">{{ pad(i + 1) }}</span>
+                    <svg class="ac-cover__ico" viewBox="0 0 48 48" fill="none" stroke="#fff" stroke-width="2.600" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      @switch (item.category) {
+                        @case ("video") {
+                          <rect x="5" y="10" width="38" height="28" rx="5" /><path d="M20 18v12l11-6Z" />
+                        }
+                        @case ("graphic") {
+                          <path d="M24 6C13 6 5 13.500 5 23c0 9 7 17 17 17 4 0 5-3 3-5-2-3 0-6 4-6h6c5 0 8-3 8-8C43 13 34 6 24 6Z" />
+                          <circle cx="14" cy="22" r="2.600" /><circle cx="22" cy="14" r="2.600" /><circle cx="33" cy="17" r="2.600" />
+                        }
+                        @case ("threeD") {
+                          <path d="M24 5 41 14.500v19L24 43 7 33.500v-19Z" /><path d="M7 14.500 24 24l17-9.500M24 24v19" />
+                        }
+                        @default {
+                          <circle cx="24" cy="24" r="18" /><ellipse cx="24" cy="24" rx="8" ry="18" /><path d="M6 24h36" />
+                        }
+                      }
+                    </svg>
+                    @if (item.embedUrl) {
+                      <span class="ac-cover__play" aria-hidden="true"></span>
+                    }
+                  </span>
+                  <span class="ac-cover__cap">{{ item.title }}</span>
+                </button>
+              }
+            </div>
+
+            @for (it of [current()]; track it.title) {
+              <div class="ac-detail">
+                <p class="ac-detail__meta">{{ it.group }} · {{ it.kind }}</p>
+                <h2>{{ it.title }}</h2>
+                <p class="ac-detail__text">{{ it.description }}</p>
+                <div class="ac-detail__actions">
+                  @if (it.embedUrl) {
+                    <button type="button" class="ac-btn ac-btn--green" (click)="activate(it)">▶ Lire la vidéo</button>
+                  }
+                  @if (it.link) {
+                    <a class="ac-btn ac-btn--green" [href]="it.link" target="_blank" rel="noopener noreferrer">Voir le site ↗</a>
+                  }
+                  <span class="ac-count">{{ index() + 1 }} / {{ items().length }}</span>
+                  <span class="ac-steps">
+                    <button type="button" class="ac-ctl ac-ctl--sm" aria-label="Projet précédent" [disabled]="index() === 0" (click)="moveCover(-1)">
+                      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5" fill="none" stroke="currentColor" stroke-width="2.600" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                    </button>
+                    <button type="button" class="ac-ctl ac-ctl--sm" aria-label="Projet suivant" [disabled]="index() === items().length - 1" (click)="moveCover(1)">
+                      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="m6 3 5 5-5 5" fill="none" stroke="currentColor" stroke-width="2.600" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                    </button>
+                  </span>
+                </div>
+              </div>
+            }
+          </div>
+
+        </section>
+      }
+
+      <!-- ----------------------- COMPÉTENCES ----------------------- -->
+      @case ("competences") {
+        <section class="ac-page ac-skills" aria-label="Compétences">
+          <ul class="ac-albums" role="tablist" aria-label="Catégories de compétences">
+            @for (a of areas; track a.id; let i = $index) {
+              <li>
+                <button
+                  type="button"
+                  role="tab"
+                  class="ac-album"
+                  [class.ac-album--on]="areaIndex() === i"
+                  [attr.aria-selected]="areaIndex() === i"
+                  [style.--h]="areaHue(a.id)"
+                  (click)="selectArea(i)"
+                >
+                  <span class="ac-album__art" aria-hidden="true">
+                    <ng-container *ngTemplateOutlet="glyph; context: { $implicit: a.id }" />
+                  </span>
+                  <span class="ac-album__txt">
+                    <strong>{{ a.title }}</strong>
+                    <small>{{ a.family }} · {{ a.skills.length }} titre{{ a.skills.length > 1 ? "s" : "" }}</small>
+                  </span>
+                </button>
+              </li>
+            }
+          </ul>
+
+          <div class="ac-tracks">
+            @for (a of [area()]; track a.id) {
+              <header class="ac-tracks__head" [style.--h]="areaHue(a.id)">
+                <span class="ac-tracks__art" aria-hidden="true">
+                  <ng-container *ngTemplateOutlet="glyph; context: { $implicit: a.id }" />
+                </span>
+                <div>
+                  <p class="ac-tracks__meta">{{ a.family }}</p>
+                  <h2>{{ a.title }}</h2>
+                  <p class="ac-tracks__count">{{ a.skills.length }} titre{{ a.skills.length > 1 ? "s" : "" }}</p>
+                </div>
+              </header>
+              <ol class="ac-tracklist">
+                @for (skill of a.skills; track skill; let i = $index) {
+                  <li>
+                    <button
+                      type="button"
+                      class="ac-track"
+                      [class.ac-track--on]="playingSkill() === skill"
+                      [attr.aria-pressed]="playingSkill() === skill"
+                      (click)="togglePlay(skill)"
+                    >
+                      <span class="ac-track__n">{{ pad(i + 1) }}</span>
+                      <span class="ac-eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+                      <span class="ac-track__name">{{ skill }}</span>
+                      <span class="ac-track__tag">{{ a.title }}</span>
+                    </button>
+                  </li>
+                }
+              </ol>
+            }
+          </div>
+        </section>
+      }
+
+      <!-- ------------------------ PARCOURS ------------------------- -->
+      @case ("parcours") {
+        <section class="ac-page ac-path" aria-label="Parcours">
+          <div class="ac-path__head">
+            <h2>Parcours</h2>
+            <ul class="ac-legend">
+              <li><span class="ac-dot ac-dot--exp"></span>{{ experiencesLabel }}</li>
+              <li><span class="ac-dot ac-dot--edu"></span>{{ educationLabel }}</li>
+            </ul>
+          </div>
+
+          <div class="ac-player">
+            <button
+              type="button"
+              class="ac-orb ac-orb--play"
+              [attr.aria-label]="autoplay() ? 'Mettre en pause le défilement' : 'Lire le parcours automatiquement'"
+              [attr.aria-pressed]="autoplay()"
+              (click)="autoplay.set(!autoplay())"
+            >
+              @if (autoplay()) {
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4.400" height="14" rx="1.200" fill="#fff" /><rect x="13.600" y="5" width="4.400" height="14" rx="1.200" fill="#fff" /></svg>
+              } @else {
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7Z" fill="#fff" stroke="#fff" stroke-width="1.500" stroke-linejoin="round" /></svg>
+              }
+            </button>
+
+            <div class="ac-seek">
+              <div class="ac-seek__track"><i class="ac-seek__fill" [style.width.%]="tPct()"></i></div>
+              @for (e of timeline; track e.title; let i = $index) {
+                <button
+                  type="button"
+                  class="ac-mark"
+                  [class.ac-mark--on]="i === tIndex()"
+                  [class.ac-mark--past]="i < tIndex()"
+                  [class.ac-mark--edu]="e.kind === 'education'"
+                  [style.left.%]="markerPct(i)"
+                  [attr.aria-label]="e.title + ', ' + e.period"
+                  [attr.aria-current]="i === tIndex() ? 'true' : null"
+                  (click)="tIndex.set(i)"
+                >
+                  <span class="ac-mark__orb"></span>
+                  <span class="ac-mark__date">{{ shortDate(e.period) }}</span>
+                </button>
+              }
+            </div>
+          </div>
+
+          @for (e of [tCurrent()]; track e.title) {
+            <article class="ac-entry" [class.ac-entry--edu]="e.kind === 'education'">
+              <span class="ac-entry__period">{{ e.period }}</span>
+              <h3>{{ e.title }}</h3>
+              <p class="ac-entry__org">{{ e.organisation }}</p>
+              <p class="ac-entry__text">{{ e.details }}</p>
+              <p class="ac-entry__kind">{{ e.kind === "experience" ? experiencesLabel : educationLabel }}</p>
+            </article>
+          }
+        </section>
+      }
+
+      <!-- ------------------------- CONTACT ------------------------- -->
+      @case ("contact") {
+        <section class="ac-page ac-contact" aria-label="Contact">
+          <div class="ac-contact__text">
+            <h2>Contactez-moi</h2>
+            <p class="ac-contact__lead">{{ profile.contactIntro }}</p>
+            <p class="ac-contact__cv">{{ profile.cvText }}</p>
+            <p class="ac-avail"><span class="ac-led" aria-hidden="true"></span>{{ profile.availability }}</p>
+          </div>
+
+          <div class="ac-tiles">
+            <a class="ac-tile" [href]="'mailto:' + profile.email">
+              <svg viewBox="0 0 48 48" fill="none" stroke="#fff" stroke-width="2.600" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="10" width="38" height="28" rx="5" /><path d="m7 14 17 13 17-13" /></svg>
+              <strong>E-mail</strong>
+              <small>{{ profile.email }}</small>
+            </a>
+            <a class="ac-tile" [href]="profile.cv" download>
+              <svg viewBox="0 0 48 48" fill="none" stroke="#fff" stroke-width="2.600" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M24 7v24m0 0-9-9m9 9 9-9M9 40h30" /></svg>
+              <strong>Mon CV</strong>
+              <small>Télécharger le PDF</small>
+            </a>
+            <a class="ac-tile" [href]="profile.github" target="_blank" rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#fff" d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.800 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.070 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.230.957-.266 1.983-.399 3.003-.404 1.020.005 2.047.138 3.006.404 2.291-1.552 3.297-1.230 3.297-1.230.653 1.653.242 2.874.118 3.176.770.840 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.430.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" /></svg>
+              <strong>GitHub</strong>
+              <small>github.com/maywix</small>
+            </a>
+            <a class="ac-tile" [href]="profile.linkedin" target="_blank" rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#fff" d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.500-12.268c-.966 0-1.750-.790-1.750-1.764s.784-1.764 1.750-1.764 1.750.790 1.750 1.764-.783 1.764-1.750 1.764zm13.500 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" /></svg>
+              <strong>LinkedIn</strong>
+              <small>Maxime Farruggia</small>
+            </a>
+          </div>
+        </section>
+      }
+    }
+  </main>
+
+  <!-- ======================= Salle de cinéma ======================= -->
+  @if (theater(); as video) {
+    <div class="ac-theater" role="dialog" aria-modal="true" [attr.aria-label]="video.title">
+      <div class="ac-theater__frame">
+        <div class="ac-theater__bar">
+          <span>{{ video.title }}</span>
+          <button #closeBtn type="button" class="ac-ctl ac-ctl--sm" aria-label="Fermer la vidéo" (click)="theater.set(null)">
+            <svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3.500 3.500 9 9M12.500 3.500l-9 9" stroke="currentColor" stroke-width="2.400" stroke-linecap="round" /></svg>
+          </button>
+        </div>
+        <div class="ac-theater__video">
+          <iframe
+            [src]="safe(video.embedUrl)"
+            [title]="video.title"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+          ></iframe>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- ======================= Barre de contrôle ======================= -->
+  <footer class="ac-bar">
+    <p class="ac-hint" aria-hidden="true">← → naviguer · PgUp / PgDn changer de section</p>
+    <div class="ac-bar__inner">
+      <button type="button" class="ac-ctl" aria-label="Section précédente" (click)="step(-1)">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M12 3v10M3 8l8-5v10Z" fill="currentColor" stroke="currentColor" stroke-width="1.200" stroke-linejoin="round" /></svg>
+      </button>
+      <button type="button" class="ac-orb ac-orb--home" aria-label="Accueil" (click)="go('accueil')">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11 12 4l8 7v8h-5v-5H9v5H4Z" fill="#fff" stroke="#fff" stroke-width="1.400" stroke-linejoin="round" /></svg>
+      </button>
+      <button type="button" class="ac-ctl" aria-label="Section suivante" (click)="step(1)">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 3v10M13 8 5 3v10Z" fill="currentColor" stroke="currentColor" stroke-width="1.200" stroke-linejoin="round" /></svg>
+      </button>
+
+      <div class="ac-prog" role="tablist" aria-label="Progression">
+        <div class="ac-prog__rail"><i [style.width.%]="(pageIndex() / (pages.length - 1)) * 100"></i></div>
+        @for (p of pages; track p.id; let i = $index) {
+          <button
+            type="button"
+            class="ac-prog__tick"
+            [class.ac-prog__tick--on]="i <= pageIndex()"
+            [style.left.%]="(i / (pages.length - 1)) * 100"
+            [attr.aria-label]="p.label"
+            [attr.aria-selected]="i === pageIndex()"
+            role="tab"
+            (click)="go(p.id)"
+          ></button>
+        }
+      </div>
+
+      <span class="ac-bar__label">{{ pad(pageIndex() + 1) }} / {{ pad(pages.length) }} · {{ pages[pageIndex()].label }}</span>
+
+      <button
+        type="button"
+        class="ac-ctl"
+        [attr.aria-pressed]="calm()"
+        [attr.aria-label]="calm() ? 'Activer les animations de fond' : 'Réduire les animations de fond'"
+        [title]="calm() ? 'Activer les animations' : 'Réduire les animations'"
+        (click)="calm.set(!calm())"
+      >
+        <svg viewBox="0 0 16 16" aria-hidden="true">
+          <path d="M2 6.500h3L9 3v10L5 9.500H2Z" fill="currentColor" />
+          @if (calm()) {
+            <path d="m11 6 4 4M15 6l-4 4" stroke="currentColor" stroke-width="1.600" stroke-linecap="round" />
+          } @else {
+            <path d="M11.500 5.500a3.600 3.600 0 0 1 0 5" fill="none" stroke="currentColor" stroke-width="1.500" stroke-linecap="round" />
+          }
+        </svg>
+      </button>
+    </div>
+  </footer>
+</div>

@@ -1,0 +1,351 @@
+/* Fenêtre Aero Glass — verre dépoli, reflets diagonaux, légende « suspendue ». */
+
+vd-window {
+  display: contents;
+}
+
+.vd-win {
+  position: absolute;
+  min-width: 300px;
+  min-height: 200px;
+  transform-origin: 50% 50%;
+  transition: transform 0.24s cubic-bezier(0.25, 0.8, 0.3, 1),
+    opacity 0.2s ease, filter 0.2s ease;
+  animation: vd-open 0.26s cubic-bezier(0.2, 0.9, 0.3, 1.04);
+  font-family: "Segoe UI", "Selawik", "Open Sans", "Frutiger", Tahoma, sans-serif;
+  color: #111;
+}
+
+.vd-win--dragging {
+  transition: none;
+  user-select: none;
+}
+
+.vd-win--max {
+  left: 0 !important;
+  top: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.vd-win--min {
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(var(--vd-tx, 0px), var(--vd-ty, 320px)) scale(0.1);
+  filter: blur(2px);
+}
+
+.vd-win--closing {
+  animation: vd-close 0.17s ease-in forwards;
+  pointer-events: none;
+}
+
+.vd-win--shake {
+  animation: vd-shake 0.6s linear;
+}
+
+.vd-win__frame {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 0 8px 8px;
+  border-radius: 9px 9px 5px 5px;
+  background: rgba(142, 172, 198, 0.42);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  box-shadow: 0 0 0 1px rgba(0, 10, 25, 0.65), 0 8px 22px rgba(0, 0, 0, 0.45),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(16px) saturate(1.4);
+  -webkit-backdrop-filter: blur(16px) saturate(1.4);
+  overflow: hidden;
+  transition: background 0.25s, box-shadow 0.25s;
+}
+
+.vd-win--active .vd-win__frame {
+  background: rgba(68, 148, 206, 0.55);
+  border-color: rgba(255, 255, 255, 0.75);
+  box-shadow: 0 0 0 1px rgba(0, 10, 25, 0.75), 0 16px 46px rgba(0, 0, 0, 0.6),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.38);
+}
+
+/* reflets spéculaires qui traversent le cadre */
+.vd-win__frame::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: linear-gradient(
+      113deg,
+      rgba(255, 255, 255, 0.5) 0%,
+      rgba(255, 255, 255, 0.2) 26%,
+      rgba(255, 255, 255, 0) 27%,
+      rgba(255, 255, 255, 0) 55%,
+      rgba(255, 255, 255, 0.24) 56%,
+      rgba(255, 255, 255, 0) 74%
+    ),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0) 38px);
+}
+
+.vd-win:not(.vd-win--active) .vd-win__frame::before {
+  opacity: 0.55;
+}
+
+.vd-win__title {
+  position: relative;
+  z-index: 1;
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  height: 31px;
+  padding-left: 2px;
+  cursor: default;
+  touch-action: none;
+}
+
+.vd-win__text {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 12.5px;
+  line-height: 1;
+  color: #000;
+  text-shadow: 0 0 9px #fff, 0 0 6px #fff, 0 0 3px #fff, 0 0 2px #fff;
+}
+
+.vd-win:not(.vd-win--active) .vd-win__text {
+  color: #3a4654;
+}
+
+.vd-win__btns {
+  align-self: flex-start;
+  display: flex;
+  margin-right: -2px;
+}
+
+.vd-cap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 29px;
+  height: 19px;
+  padding: 0;
+  margin-left: -1px;
+  border: 1px solid rgba(12, 30, 56, 0.85);
+  border-top: none;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.78) 0%,
+    rgba(206, 226, 244, 0.6) 46%,
+    rgba(112, 154, 204, 0.7) 50%,
+    rgba(160, 200, 238, 0.82) 100%
+  );
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+  cursor: default;
+  transition: filter 0.15s, box-shadow 0.15s;
+}
+
+.vd-cap svg {
+  width: 12px;
+  height: 12px;
+}
+
+.vd-cap--min {
+  border-bottom-left-radius: 6px;
+}
+
+.vd-cap--close {
+  width: 47px;
+  border-bottom-right-radius: 6px;
+  background: linear-gradient(
+    to bottom,
+    #f1b0a2 0%,
+    #de5b45 46%,
+    #b8230f 50%,
+    #de5f48 100%
+  );
+  border-color: rgba(70, 8, 0, 0.9);
+}
+
+.vd-cap:hover {
+  filter: brightness(1.12);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.7), 0 0 9px 1px rgba(120, 215, 255, 0.95);
+}
+
+.vd-cap--close:hover {
+  box-shadow: inset 0 0 0 1px rgba(255, 220, 210, 0.8), 0 0 12px 2px rgba(255, 70, 40, 0.95);
+}
+
+.vd-cap:active {
+  filter: brightness(0.9);
+}
+
+.vd-win:not(.vd-win--active) .vd-cap:not(:hover) {
+  opacity: 0.7;
+}
+
+.vd-win__client {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid rgba(0, 20, 45, 0.75);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.4);
+  border-radius: 2px;
+}
+
+/* l'élément hôte de chaque application remplit la zone cliente */
+.vd-win__client > * {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.vd-win__client > * > * {
+  flex: 1 1 0;
+  min-height: 0;
+}
+
+/* poignées de redimensionnement */
+.vd-grip {
+  position: absolute;
+  z-index: 3;
+  display: block;
+  touch-action: none;
+}
+
+.vd-grip--e {
+  right: -4px;
+  top: 14px;
+  bottom: 14px;
+  width: 9px;
+  cursor: ew-resize;
+}
+
+.vd-grip--w {
+  left: -4px;
+  top: 14px;
+  bottom: 14px;
+  width: 9px;
+  cursor: ew-resize;
+}
+
+.vd-grip--s {
+  left: 14px;
+  right: 14px;
+  bottom: -4px;
+  height: 9px;
+  cursor: ns-resize;
+}
+
+.vd-grip--se {
+  right: -5px;
+  bottom: -5px;
+  width: 18px;
+  height: 18px;
+  cursor: nwse-resize;
+}
+
+.vd-grip--sw {
+  left: -5px;
+  bottom: -5px;
+  width: 18px;
+  height: 18px;
+  cursor: nesw-resize;
+}
+
+.vd-win--max .vd-grip {
+  display: none;
+}
+
+.vd-win--max .vd-win__frame {
+  border-radius: 0;
+}
+
+/* mobile : fenêtres plein écran */
+.vd--compact .vd-win {
+  left: 0 !important;
+  top: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 0;
+  min-height: 0;
+}
+
+.vd--compact .vd-win__frame {
+  border-radius: 0;
+  padding: 0 4px 4px;
+}
+
+.vd--compact .vd-grip,
+.vd--compact .vd-cap--max {
+  display: none;
+}
+
+.vd--compact .vd-cap--min {
+  border-bottom-left-radius: 6px;
+}
+
+@keyframes vd-open {
+  from {
+    opacity: 0;
+    transform: scale(0.92) translateY(14px);
+  }
+}
+
+@keyframes vd-close {
+  to {
+    opacity: 0;
+    transform: scale(0.93);
+  }
+}
+
+@keyframes vd-shake {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  10% {
+    transform: translate(-14px, 4px) rotate(-0.4deg);
+  }
+  20% {
+    transform: translate(13px, -5px) rotate(0.4deg);
+  }
+  30% {
+    transform: translate(-12px, 3px);
+  }
+  40% {
+    transform: translate(11px, -3px);
+  }
+  50% {
+    transform: translate(-9px, 4px);
+  }
+  60% {
+    transform: translate(8px, -2px);
+  }
+  75% {
+    transform: translate(-5px, 2px);
+  }
+  90% {
+    transform: translate(3px, -1px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vd-win {
+    animation: none;
+    transition: none;
+  }
+  .vd-win--shake {
+    animation: none;
+  }
+}

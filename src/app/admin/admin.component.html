@@ -1,0 +1,246 @@
+@if (theme.isAdmin()) {
+  <div class="mwa-chip" role="toolbar" aria-label="Administration du portfolio">
+    <button
+      type="button"
+      class="mwa-chip__btn"
+      (click)="theme.openPanel()"
+      title="Panneau d'administration (Ctrl+Alt+A)"
+    >
+      <svg viewBox="0 0 24 24" aria-hidden="true" class="mwa-chip__ico">
+        <path
+          fill="currentColor"
+          d="M19.4 13a7.6 7.6 0 0 0 0-2l2.1-1.6a.5.5 0 0 0 .1-.6l-2-3.5a.5.5 0 0 0-.6-.2l-2.5 1a7.4 7.4 0 0 0-1.7-1l-.4-2.6a.5.5 0 0 0-.5-.4h-4a.5.5 0 0 0-.5.4l-.4 2.6a7.4 7.4 0 0 0-1.7 1l-2.5-1a.5.5 0 0 0-.6.2l-2 3.5a.5.5 0 0 0 .1.6L4.6 11a7.6 7.6 0 0 0 0 2l-2.1 1.6a.5.5 0 0 0-.1.6l2 3.5c.1.2.4.3.6.2l2.5-1c.5.4 1.1.7 1.7 1l.4 2.6c0 .2.2.4.5.4h4c.3 0 .5-.2.5-.4l.4-2.6c.6-.3 1.2-.6 1.7-1l2.5 1c.2.1.5 0 .6-.2l2-3.5a.5.5 0 0 0-.1-.6L19.4 13ZM12 15.5A3.5 3.5 0 1 1 12 8.5a3.5 3.5 0 0 1 0 7Z"
+        />
+      </svg>
+      <span class="mwa-chip__label">Admin</span>
+    </button>
+    @if (theme.current() !== "classic") {
+      <button
+        type="button"
+        class="mwa-chip__btn mwa-chip__btn--back"
+        (click)="theme.resetToNormal()"
+        title="Revenir au mode normal"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true" class="mwa-chip__ico">
+          <path
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.4"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M9 7 4 12l5 5M4 12h10a6 6 0 0 1 0 12"
+            transform="translate(0 -3)"
+          />
+        </svg>
+        <span class="mwa-chip__label">Mode normal</span>
+      </button>
+    }
+  </div>
+}
+
+@if (theme.panelOpen()) {
+  <div class="mwa-backdrop" (click)="theme.closePanel()"></div>
+  <section
+    #dialog
+    class="mwa-dialog"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="mwa-title"
+    tabindex="-1"
+  >
+    <header class="mwa-titlebar">
+      <svg viewBox="0 0 24 24" class="mwa-titlebar__ico" aria-hidden="true">
+        <defs>
+          <linearGradient id="mwa-orb" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#d9f6ff" />
+            <stop offset="0.5" stop-color="#3fb4e8" />
+            <stop offset="1" stop-color="#0a5da8" />
+          </linearGradient>
+        </defs>
+        <circle cx="12" cy="12" r="10.5" fill="url(#mwa-orb)" stroke="#fff" stroke-opacity=".7" />
+        <ellipse cx="9.5" cy="7.2" rx="5.5" ry="3" fill="#fff" opacity=".65" />
+      </svg>
+      <h2 id="mwa-title" class="mwa-titlebar__text">
+        Personnalisation du portfolio
+      </h2>
+      <button
+        type="button"
+        class="mwa-close"
+        aria-label="Fermer le panneau"
+        (click)="theme.closePanel()"
+      >
+        ✕
+      </button>
+    </header>
+
+    <div class="mwa-body">
+      @if (!theme.isAdmin()) {
+        <form class="mwa-login" (submit)="submit($event)">
+          <div class="mwa-login__badge" aria-hidden="true">
+            <svg viewBox="0 0 64 64" width="64" height="64">
+              <defs>
+                <linearGradient id="mwa-lock" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="#ffe9a3" />
+                  <stop offset="0.5" stop-color="#f5b82e" />
+                  <stop offset="1" stop-color="#c98311" />
+                </linearGradient>
+              </defs>
+              <path
+                d="M20 28v-7a12 12 0 0 1 24 0v7"
+                fill="none"
+                stroke="#8aa4bd"
+                stroke-width="6"
+                stroke-linecap="round"
+              />
+              <rect x="12" y="26" width="40" height="30" rx="7" fill="url(#mwa-lock)" stroke="#8a5a0b" />
+              <ellipse cx="32" cy="32" rx="17" ry="4.5" fill="#fff" opacity=".45" />
+              <circle cx="32" cy="41" r="4" fill="#6b4408" />
+              <rect x="30.5" y="41" width="3" height="9" rx="1.5" fill="#6b4408" />
+            </svg>
+          </div>
+          <div class="mwa-login__main">
+            <h3>Accès réservé</h3>
+            <p>
+              Entre le mot de passe administrateur pour choisir l'apparence du
+              portfolio.
+            </p>
+            <label class="mwa-field">
+              <span>Mot de passe</span>
+              <input
+                #passInput
+                type="password"
+                name="passcode"
+                autocomplete="current-password"
+                [class.mwa-field--error]="error()"
+                (input)="onPasscodeInput($event)"
+              />
+            </label>
+            @if (error()) {
+              <p class="mwa-error" role="alert">Mot de passe incorrect.</p>
+            }
+            <div class="mwa-actions">
+              <button type="submit" class="mwa-btn mwa-btn--default" [disabled]="busy()">
+                Se connecter
+              </button>
+              <button type="button" class="mwa-btn" (click)="theme.closePanel()">
+                Annuler
+              </button>
+            </div>
+          </div>
+        </form>
+      } @else {
+        <p class="mwa-intro">
+          Choisis l'apparence du portfolio. Le changement est immédiat et tu
+          peux revenir au <strong>mode normal</strong> à tout moment.
+        </p>
+
+        <div class="mwa-grid" role="radiogroup" aria-label="Thèmes">
+          @for (info of theme.themes; track info.id) {
+            <div
+              class="mwa-card"
+              [class.mwa-card--active]="isActive(info)"
+              role="radio"
+              [attr.aria-checked]="isActive(info)"
+              tabindex="0"
+              (click)="choose(info)"
+              (keydown.enter)="choose(info)"
+              (keydown.space)="choose(info); $event.preventDefault()"
+            >
+              <div class="mwa-prev" [attr.data-prev]="info.id" aria-hidden="true">
+                @switch (info.id) {
+                  @case ("classic") {
+                    <span class="p-line p-line--a"></span>
+                    <span class="p-line p-line--b"></span>
+                    <span class="p-pill p-pill--1"></span>
+                    <span class="p-pill p-pill--2"></span>
+                    <span class="p-card"></span>
+                  }
+                  @case ("vista-desktop") {
+                    <span class="p-aurora"></span>
+                    <span class="p-win"><i></i></span>
+                    <span class="p-win p-win--2"><i></i></span>
+                    <span class="p-task"><b></b></span>
+                  }
+                  @case ("aero-horizon") {
+                    <span class="p-cloud"></span>
+                    <span class="p-cloud p-cloud--2"></span>
+                    <span class="p-hill"></span>
+                    <span class="p-hill p-hill--2"></span>
+                    <span class="p-bub p-bub--1"></span>
+                    <span class="p-bub p-bub--2"></span>
+                    <span class="p-bub p-bub--3"></span>
+                    <span class="p-title"></span>
+                  }
+                  @case ("aero-cinema") {
+                    <span class="p-glow"></span>
+                    <span class="p-strip"></span>
+                    <span class="p-tile p-tile--1"></span>
+                    <span class="p-tile p-tile--2"></span>
+                    <span class="p-tile p-tile--3"></span>
+                    <span class="p-bar"><b></b></span>
+                  }
+                }
+                @if (isActive(info)) {
+                  <span class="mwa-badge">Actif</span>
+                }
+              </div>
+              <div class="mwa-card__body">
+                <h3>{{ info.name }}</h3>
+                <p class="mwa-card__tag">{{ info.tagline }}</p>
+                <p class="mwa-card__desc">{{ info.description }}</p>
+                <ul class="mwa-tags">
+                  @for (tag of info.tags; track tag) {
+                    <li>{{ tag }}</li>
+                  }
+                </ul>
+                <div class="mwa-card__actions">
+                  <button
+                    type="button"
+                    class="mwa-btn mwa-btn--small"
+                    [class.mwa-btn--default]="!isActive(info)"
+                    [disabled]="isActive(info)"
+                    (click)="choose(info); $event.stopPropagation()"
+                  >
+                    {{ isActive(info) ? "Thème actif" : "Activer" }}
+                  </button>
+                  <button
+                    type="button"
+                    class="mwa-btn mwa-btn--small mwa-btn--link"
+                    (click)="copyConfig(info, $event)"
+                    title="Copier la ligne à coller dans site.config.ts pour publier ce thème"
+                  >
+                    {{ copied() === info.id ? "Copié ✓" : "Copier la config" }}
+                  </button>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+
+        <footer class="mwa-footer">
+          <p class="mwa-note">
+            <strong>Visiteurs :</strong> ils voient « {{ themeLabel(publicTheme) }} ».
+            Ton choix n'est enregistré que dans ce navigateur. Pour publier un
+            thème, copie sa config dans
+            <code>src/app/config/site.config.ts</code> puis redéploie.
+          </p>
+          <div class="mwa-actions">
+            <button
+              type="button"
+              class="mwa-btn mwa-btn--default"
+              (click)="theme.resetToNormal(); theme.closePanel()"
+            >
+              ↩ Revenir au mode normal
+            </button>
+            <button type="button" class="mwa-btn" (click)="theme.logout()">
+              Se déconnecter
+            </button>
+            <button type="button" class="mwa-btn" (click)="theme.closePanel()">
+              Fermer
+            </button>
+          </div>
+        </footer>
+      }
+    </div>
+  </section>
+}

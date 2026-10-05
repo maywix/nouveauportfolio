@@ -1,0 +1,68 @@
+<div class="vd-wmp">
+  <nav class="vd-wmp__tabs" aria-label="Sections du lecteur">
+    <span class="vd-wmp__tab vd-wmp__tab--on">Lecture en cours</span>
+    <span class="vd-wmp__tab">Bibliothèque</span>
+    <span class="vd-wmp__tab">Montage</span>
+    <span class="vd-wmp__tab">Motion</span>
+  </nav>
+
+  <div class="vd-wmp__stage">
+    <div class="vd-wmp__video">
+      <p class="vd-wmp__loading">Chargement de la vidéo…</p>
+      <iframe
+        #frame
+        [src]="src()"
+        [title]="current().title"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+      ></iframe>
+    </div>
+
+    <aside class="vd-wmp__list" aria-label="Liste de lecture">
+      <h3>Liste de lecture</h3>
+      <ol>
+        @for (item of playlist; track item.title; let i = $index) {
+          <li>
+            <button
+              type="button"
+              class="vd-wmp__track"
+              [class.vd-wmp__track--on]="i === index()"
+              (click)="play(i)"
+            >
+              <span class="vd-wmp__n">{{ i === index() ? "▶" : i + 1 }}</span>
+              <span class="vd-wmp__tt">
+                <strong>{{ item.title }}</strong>
+                <small>{{ item.group }}</small>
+              </span>
+            </button>
+          </li>
+        }
+      </ol>
+    </aside>
+  </div>
+
+  <div class="vd-wmp__info">
+    <strong>{{ current().title }}</strong>
+    <span>{{ current().description }}</span>
+  </div>
+
+  <div class="vd-wmp__controls">
+    <div class="vd-wmp__seek"><i></i></div>
+    <div class="vd-wmp__buttons">
+      <button type="button" class="vd-wmp__btn" aria-label="Précédent" (click)="prev()">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 3v10M13 3v10L6 8Z" fill="#fff" stroke="#fff" stroke-width="1.400" stroke-linejoin="round" /></svg>
+      </button>
+      <button type="button" class="vd-wmp__btn vd-wmp__btn--play" [attr.aria-label]="playing() ? 'Pause' : 'Lecture'" (click)="toggle()">
+        @if (playing()) {
+          <svg viewBox="0 0 16 16" aria-hidden="true"><rect x="3.500" y="2.500" width="3.200" height="11" rx=".8" fill="#fff" /><rect x="9.300" y="2.500" width="3.200" height="11" rx=".8" fill="#fff" /></svg>
+        } @else {
+          <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4.500 2.500v11l9-5.500Z" fill="#fff" stroke="#fff" stroke-linejoin="round" /></svg>
+        }
+      </button>
+      <button type="button" class="vd-wmp__btn" aria-label="Suivant" (click)="next()">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M12 3v10M3 3v10l7-5Z" fill="#fff" stroke="#fff" stroke-width="1.400" stroke-linejoin="round" /></svg>
+      </button>
+    </div>
+  </div>
+</div>

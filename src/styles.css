@@ -107,3 +107,34 @@ body {
     padding: 0.5rem;
   }
 }
+
+/* ------------------------------------------------------------------ */
+/* Sélecteur de thèmes (voir src/app/core/theme.service.ts)             */
+/* Le thème actif est exposé via <html data-theme="…" data-admin="…">.   */
+/* ------------------------------------------------------------------ */
+
+/* Les thèmes Aero ne s'appuient pas sur le fond teal de Tailwind. */
+html[data-theme="vista-desktop"] body {
+  background: #031a2c !important;
+  overflow: hidden;
+}
+
+html[data-theme="aero-horizon"] body {
+  background: #7cc4f2 !important;
+}
+
+html[data-theme="aero-cinema"] body {
+  background: #01070c !important;
+  overflow: hidden;
+}
+
+/* Emplacement de la puce admin pour ne pas masquer l'interface des thèmes. */
+html[data-theme="vista-desktop"] {
+  --mw-chip-bottom: 58px;
+  --mw-chip-right: 14px;
+}
+
+html[data-theme="aero-cinema"] {
+  --mw-chip-bottom: 92px;
+  --mw-chip-right: 14px;
+}

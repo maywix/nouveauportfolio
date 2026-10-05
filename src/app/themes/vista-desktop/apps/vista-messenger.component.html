@@ -1,0 +1,89 @@
+<div class="vd-msn">
+  <header class="vd-msn__head">
+    <div class="vd-msn__me">
+      <div class="vd-msn__frame">
+        <app-aero-buddy tone="green" />
+        <span class="vd-msn__dot" title="En ligne"></span>
+      </div>
+      <div class="vd-msn__id">
+        <p class="vd-msn__name">
+          {{ profile.fullName }} <span class="vd-msn__state">(Disponible)</span>
+        </p>
+        <p class="vd-msn__psm">♪ {{ profile.availability }} — audiovisuel ou développement web</p>
+        <p class="vd-msn__mail">{{ profile.email }}</p>
+      </div>
+    </div>
+  </header>
+
+  <div class="vd-msn__tools">
+    <a class="vd-cmd" [href]="'mailto:' + profile.email">
+      <vd-icon name="mail" [size]="16" /> E-mail
+    </a>
+    <a class="vd-cmd" [href]="profile.cv" download>
+      <vd-icon name="pdf" [size]="16" /> Mon CV
+    </a>
+    <a class="vd-cmd" [href]="profile.github" target="_blank" rel="noopener noreferrer">
+      <vd-icon name="github" [size]="15" /> GitHub
+    </a>
+    <a class="vd-cmd" [href]="profile.linkedin" target="_blank" rel="noopener noreferrer">
+      <vd-icon name="linkedin" [size]="15" /> LinkedIn
+    </a>
+    <button type="button" class="vd-cmd vd-cmd--wizz" (click)="wizz()">⚡ Wizz</button>
+  </div>
+
+  <div class="vd-msn__main">
+    <div class="vd-msn__chat">
+      <div #log class="vd-msn__log" role="log" aria-live="polite">
+        @for (m of messages(); track $index) {
+          @if (m.from === "sys") {
+            <p class="vd-msn__sys">{{ m.text }}</p>
+          } @else if (m.actions) {
+            <div class="vd-msn__row vd-msn__row--me">
+              <div class="vd-bubble vd-bubble--actions">
+                <p>Vous pouvez aussi me retrouver ici :</p>
+                <div class="vd-msn__quick">
+                  <a class="vd-qbtn" [href]="profile.cv" download>Télécharger mon CV</a>
+                  <a class="vd-qbtn" [href]="'mailto:' + profile.email">M'écrire un e-mail</a>
+                  <a class="vd-qbtn" [href]="profile.github" target="_blank" rel="noopener noreferrer">GitHub</a>
+                  <a class="vd-qbtn" [href]="profile.linkedin" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+                </div>
+              </div>
+            </div>
+          } @else {
+            <div class="vd-msn__row" [class.vd-msn__row--me]="m.from === 'me'">
+              <div class="vd-msn__who">{{ m.from === "me" ? "Maxime" : "Vous" }} · {{ m.time }}</div>
+              <div class="vd-bubble" [class.vd-bubble--you]="m.from === 'you'">{{ m.text }}</div>
+            </div>
+          }
+        }
+        @if (typing()) {
+          <p class="vd-msn__typing">Maxime est en train d'écrire<span>.</span><span>.</span><span>.</span></p>
+        }
+      </div>
+
+      <form class="vd-msn__compose" (submit)="$event.preventDefault(); send()">
+        <textarea
+          rows="3"
+          placeholder="Écrivez votre message ici…"
+          aria-label="Votre message"
+          [value]="draft"
+          (input)="onDraft($event)"
+          (keydown)="onKey($event)"
+        ></textarea>
+        <div class="vd-msn__send">
+          <button type="submit" class="vd-sendbtn" [disabled]="!draft.trim()">Envoyer par e-mail</button>
+          <small>Le message s'ouvre dans votre messagerie.</small>
+        </div>
+      </form>
+    </div>
+
+    <aside class="vd-msn__side" aria-hidden="true">
+      <div class="vd-msn__pic">
+        <app-aero-buddy tone="green" />
+      </div>
+      <div class="vd-msn__pic vd-msn__pic--you">
+        <app-aero-buddy tone="blue" />
+      </div>
+    </aside>
+  </div>
+</div>

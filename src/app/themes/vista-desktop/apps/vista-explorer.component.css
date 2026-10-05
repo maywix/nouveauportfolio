@@ -1,0 +1,342 @@
+.vd-ex {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  background: #fff;
+  font-size: 12.5px;
+  color: #111;
+}
+
+.vd-ex__top {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  background: linear-gradient(to bottom, #f4f9fe 0%, #dce8f5 100%);
+  border-bottom: 1px solid #b4c7db;
+}
+
+.vd-ex__nav {
+  display: flex;
+  gap: 2px;
+}
+
+.vd-ex__main {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+}
+
+.vd-ex__nav-pane {
+  flex: none;
+  width: 176px;
+  overflow: auto;
+  padding: 8px 6px;
+  background: linear-gradient(to bottom, #f1f6fc, #e2ecf7);
+  border-right: 1px solid #b4c7db;
+}
+
+.vd-ex__nav-pane ul {
+  margin: 0 0 12px;
+  padding: 0;
+  list-style: none;
+}
+
+.vd-fav {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  width: 100%;
+  padding: 4px 6px;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  background: transparent;
+  font: inherit;
+  color: #1b2d44;
+  text-align: left;
+  cursor: pointer;
+}
+
+.vd-fav:hover {
+  border-color: #b8d6f2;
+  background: linear-gradient(#f7fbff, #e3f1fd);
+}
+
+.vd-fav--on {
+  border-color: #7da2ce;
+  background: linear-gradient(#f2f9ff, #cde6fb 50%, #bcdcf6 52%, #d0e7fa);
+}
+
+.vd-tree {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 12px;
+  color: #1b2d44;
+}
+
+.vd-tree__row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 4px;
+  border-radius: 3px;
+}
+
+.vd-tree__row--child {
+  margin-left: 14px;
+  color: #3d5169;
+}
+
+.vd-tree__row--on {
+  background: #dbeaf8;
+  color: #0b2a4a;
+}
+
+.vd-ex__content {
+  flex: 1;
+  min-width: 0;
+  overflow: auto;
+  padding: 10px 14px 16px;
+  outline: none;
+  background: #fff;
+}
+
+.vd-group {
+  margin-bottom: 14px;
+}
+
+.vd-group__h {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin: 0 0 6px;
+  padding-bottom: 2px;
+  font: 400 15px/1.3 "Segoe UI", "Open Sans", sans-serif;
+  color: #1e3a8a;
+  border-bottom: 1px solid #cbd8e8;
+}
+
+.vd-group__n {
+  font-size: 12px;
+  color: #7b8a9b;
+}
+
+.vd-group__d {
+  margin: 0 0 8px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #5a6a7c;
+  max-width: 62ch;
+}
+
+.vd-items--tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(124px, 1fr));
+  gap: 6px;
+}
+
+.vd-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 8px 6px 6px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background: transparent;
+  font: inherit;
+  color: #111;
+  cursor: default;
+  text-align: center;
+}
+
+.vd-item:hover {
+  border-color: #cfe3f6;
+  background: linear-gradient(#fafdff, #eaf4fd);
+}
+
+.vd-item--on,
+.vd-item--on:hover {
+  border-color: #7da2ce;
+  background: linear-gradient(#f4faff, #d2e8fb 50%, #c0def7 52%, #d4e9fb);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.85);
+}
+
+.vd-item:focus-visible,
+.vd-row:focus-visible,
+.vd-trow:focus-visible {
+  outline: 1px dotted #28507f;
+  outline-offset: -2px;
+}
+
+.vd-item__name {
+  font-size: 12px;
+  line-height: 1.25;
+  word-break: break-word;
+}
+
+.vd-item__type {
+  font-size: 11px;
+  color: #6b7b8c;
+}
+
+/* vignette façon « photo » Vista */
+.vd-thumb {
+  --h: 200;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 92px;
+  height: 66px;
+  border-radius: 2px;
+  border: 3px solid #fff;
+  outline: 1px solid rgba(40, 60, 90, 0.55);
+  background: linear-gradient(
+    150deg,
+    hsl(var(--h) 88% 72%),
+    hsl(var(--h) 78% 44%) 60%,
+    hsl(var(--h) 80% 30%)
+  );
+  box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+}
+
+.vd-thumb::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 45% 0;
+  background: linear-gradient(rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0.05));
+  border-radius: 0 0 50% 50% / 0 0 36% 36%;
+}
+
+.vd-thumb vd-icon {
+  position: relative;
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.35));
+}
+
+.vd-thumb--sm {
+  flex: none;
+  width: 58px;
+  height: 44px;
+}
+
+.vd-items--list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 2px 8px;
+}
+
+.vd-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 6px;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  background: transparent;
+  font: inherit;
+  color: #111;
+  text-align: left;
+  cursor: default;
+}
+
+.vd-row:hover {
+  border-color: #cfe3f6;
+  background: linear-gradient(#fafdff, #eaf4fd);
+}
+
+.vd-table {
+  display: flex;
+  flex-direction: column;
+}
+
+.vd-trow {
+  display: grid;
+  grid-template-columns: minmax(150px, 1.1fr) minmax(90px, 0.6fr) minmax(0, 2fr);
+  gap: 10px;
+  padding: 3px 6px;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  background: transparent;
+  font: inherit;
+  color: #111;
+  text-align: left;
+  cursor: default;
+}
+
+.vd-trow:hover {
+  border-color: #cfe3f6;
+  background: linear-gradient(#fafdff, #eaf4fd);
+}
+
+.vd-tcell {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.vd-tcell--name {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.vd-tcell--type,
+.vd-tcell--desc {
+  color: #55677a;
+  align-self: center;
+}
+
+@media (max-width: 640px) {
+  .vd-ex__nav-pane {
+    display: none;
+  }
+  .vd-trow {
+    grid-template-columns: 1fr;
+  }
+  .vd-tcell--desc,
+  .vd-tcell--type {
+    display: none;
+  }
+}
+
+.vd-ex__details {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 74px;
+  padding: 8px 14px;
+  background: linear-gradient(to bottom, #f6fafe, #dfeaf6);
+  border-top: 1px solid #b4c7db;
+}
+
+.vd-details__txt {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+  font-size: 12px;
+  color: #33475c;
+}
+
+.vd-details__txt strong {
+  font-weight: 600;
+  font-size: 13px;
+  color: #12263d;
+}
+
+.vd-details__txt em {
+  font-style: normal;
+  color: #6a7b8e;
+}
+
+.vd-details__desc {
+  color: #44586d;
+  line-height: 1.4;
+}
